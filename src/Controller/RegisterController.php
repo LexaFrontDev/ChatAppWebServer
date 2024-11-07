@@ -5,7 +5,6 @@ namespace App\Controller;
 
 use App\Entity\Users;
 use App\Form\RegistrationFormType;
-use App\Security\EmailVerifier;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,18 +12,21 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Mime\Address;
+use App\Service\CheckUsersTable;
+use App\Service\SendCode;
+
 
 class RegisterController extends AbstractController
 {
-    private $emailVerifier;
+    private SendCode $sendCode;
     private EntityManagerInterface $entityManager;
+    private CheckUsersTable $checkUsersTable;
 
-    public function __construct(EntityManagerInterface $entityManager, EmailVerifier $emailVerifier)
+    public function __construct(SendCode $sendCode,CheckUsersTable $checkUsersTable, EntityManagerInterface $entityManager)
     {
+        $this->sendCode = $sendCode;
+        $this->checkUsersTable = $checkUsersTable;
         $this->entityManager = $entityManager;
-        $this->emailVerifier = $emailVerifier;
     }
 
     #[Route('/api/register', name: 'Register', methods: ['POST'])]
@@ -38,11 +40,10 @@ class RegisterController extends AbstractController
 
         $user = new Users();
 
-        $userByName = $this->entityManager->getRepository(Users::class)->findOneBy(['name' => $name]);
-        $userByEmail = $this->entityManager->getRepository(Users::class)->findOneBy(['email' => $email]);
+        $checkTable = $this->checkUsersTable->check($name, $email);
 
-        if ($userByName || $userByEmail) {
-            return new JsonResponse('Имя или почта пользователя уже есть', 400);
+        if (!$checkTable) {
+            return new JsonResponse('Пользователь с таким именем или почтой существуеть', 400);
         }
 
         $form = $this->createForm(RegistrationFormType::class, $user, [
@@ -56,7 +57,6 @@ class RegisterController extends AbstractController
             'plainPassword' => $plainPassword,
         ];
 
-
         $form->submit($formData);
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword(
@@ -69,14 +69,11 @@ class RegisterController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address('LexaDev@example.com', 'AcmeMailBot'))
-                    ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
-            );
 
-            return $this->json(['message' => 'Registration successful!'], Response::HTTP_CREATED);
+
+            $sendCode = $this->sendCode->send($email);
+
+            return $this->json(['message' => 'Регистрация прошла успешно! пожалуйста подтвердите свою почту!'], Response::HTTP_CREATED);
         }
 
         return $this->json([

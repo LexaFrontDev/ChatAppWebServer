@@ -11,6 +11,13 @@ Register:
     controller: App\Controller\RegisterController::register
     methods: POST
 
-app_verify_email:
-    path: /verify/email
-    controller: App\Controller\VerifyEmail::verifyUserEmail
+
+
+veryfiEmail:
+    path: /api/veryfiEmail
+    controller: App\Controller\VeryfiMailController::veryfi
+    methods: POST
+
+TestMailer:
+    path: api/test/mailer
+    controller: App/Controller/MailerTest::test

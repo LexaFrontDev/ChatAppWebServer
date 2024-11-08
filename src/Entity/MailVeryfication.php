@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\MailVeryficationRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
-use DateTimeInterface;
 
 #[ORM\Entity(repositoryClass: MailVeryficationRepository::class)]
 #[Broadcast]
@@ -13,21 +12,36 @@ class MailVeryfication
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(name: 'id_mail')]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'email', type: 'string', length: 255)]
+    #[ORM\ManyToOne(targetEntity: Users::class)]
+    #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id", nullable: true)]
+    private ?Users $idUser = null;
+
+    #[ORM\Column(type: 'string', length: 255)]
     private string $email;
 
-    #[ORM\Column(name: 'code', type: 'integer')]
+    #[ORM\Column(type: 'integer')]
     private int $code;
 
-    #[ORM\Column(name: 'dateTime', type: "datetime")]
+    #[ORM\Column(type: 'datetime')]
     private \DateTimeInterface $createdAt;
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getIdUser(): Users
+    {
+        return $this->idUser;
+    }
+
+    public function setIdUser(Users $idUser): self
+    {
+        $this->idUser = $idUser;
+        return $this;
     }
 
     public function getEmail(): string
@@ -52,14 +66,26 @@ class MailVeryfication
         return $this;
     }
 
-    public function getCreatedAt(): DateTimeInterface
+    public function isVerified(): bool
+    {
+        return $this->is_verified;
+    }
+
+    public function setIsVerified(bool $is_verified): self
+    {
+        $this->is_verified = $is_verified;
+        return $this;
+    }
+
+    public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTimeInterface $createdAt): self
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
         return $this;
     }
 }
+

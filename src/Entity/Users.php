@@ -1,30 +1,32 @@
 <?php
 
+
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
-#[ORM\Table(name: '`Users`')]
+#[ORM\Table(name: "Users")]
 class Users implements UserInterface, PasswordAuthenticatedUserInterface
 {
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'name', type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
     private ?string $name = null;
 
-    #[ORM\Column(name: 'email', type: 'string', length: 255, unique: true)]
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
     private ?string $email = null;
 
-    #[ORM\Column(name: 'password', type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $password = null;
+
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private bool $is_verified = false;
 
     public function getId(): ?int
     {
@@ -71,7 +73,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function eraseCredentials()
     {
-
     }
 
     public function getUserIdentifier(): string

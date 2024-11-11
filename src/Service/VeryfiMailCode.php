@@ -4,6 +4,7 @@
 namespace App\Service;
 
 use App\Entity\MailVeryfication;
+use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AsService;
 
@@ -25,10 +26,17 @@ class VeryfiMailCode
 
 
         $repository = $this->entityManager->getRepository(MailVeryfication::class);
+
         $verification = $repository->findOneBy(['email' => $email, 'code' => $code]);
 
         if ($verification && (new \DateTime())->getTimestamp() - $verification->getCreatedAt()->getTimestamp() < 3600) {
-            return true;
+            $repositoryUsers = $this->entityManager->getRepository(Users::class);
+            $user = $repositoryUsers->findOneBy(['email' => $email]);
+            if ($user) {
+                $user->setIsVerified(true);
+                $this->entityManager->flush();
+                return true;
+            }
         }
 
         throw new \InvalidArgumentException("Неверный код или код просрочен");

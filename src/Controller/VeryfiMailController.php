@@ -46,8 +46,10 @@ class VeryfiMailController extends AbstractController
                 return new JsonResponse('Почта подтверждена', 201);
             }
         }catch(\InvalidArgumentException $e){
-            return new JsonResponse('Error: ' . $e->getMessage());
+            return new JsonResponse(['error' => 'Error: ' . $e->getMessage()], 400);
         };
+
+
 
 
         return new JsonResponse('Неверный код или почта', 400);

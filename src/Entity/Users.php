@@ -79,4 +79,17 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->email;
     }
+
+    public function isVerified(): bool
+    {
+        return $this->is_verified;
+    }
+
+    public function setVerified(bool $verified): self
+    {
+        $this->is_verified = $verified;
+        return $this;
+    }
+
+
 }

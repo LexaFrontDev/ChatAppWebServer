@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+
+
+use App\Entity\Users;
 use App\Repository\MailVeryficationRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
@@ -15,9 +18,9 @@ class MailVeryfication
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Users::class)]
+    #[ORM\ManyToOne(targetEntity: Users::class)] // Оставляем "Users"
     #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id", nullable: true)]
-    private ?Users $idUser = null;
+    private ?Users $user = null;
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $email;

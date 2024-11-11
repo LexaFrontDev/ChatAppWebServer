@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Service\VeryfiMailCode;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class VeryfiMailController extends AbstractController
@@ -37,11 +38,17 @@ class VeryfiMailController extends AbstractController
         }
 
 
-        $veryfi = $this->veryfiMailCode->veryfi($email, $code);
 
-        if ($veryfi) {
-            return new JsonResponse('Почта подтверждена', 201);
-        }
+        try{
+            $veryfi = $this->veryfiMailCode->veryfi($email, $code);
+            if ($veryfi)
+            {
+                return new JsonResponse('Почта подтверждена', 201);
+            }
+        }catch(\InvalidArgumentException $e){
+            return new JsonResponse('Error: ' . $e->getMessage());
+        };
+
 
         return new JsonResponse('Неверный код или почта', 400);
     }

@@ -59,15 +59,10 @@
                     ->subject('Your verification code:')
                     ->text('Your verification code: ' . $code);
 
-                $this->logger->info('Попытка отправить письмо на ' . $email);
-
                 $this->mailer->send($emailMessage);
-
-                $this->logger->info('Письмо успешно отправлено на ' . $email);
                 return true;
 
             } catch (\Exception $e) {
-                $this->logger->error('Ошибка при отправке письма: ' . $e->getMessage());
                 throw new \InvalidArgumentException("Произошла ошибка при выполнении кода: " . $e->getMessage());
             }
         }

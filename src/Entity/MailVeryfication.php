@@ -18,7 +18,7 @@ class MailVeryfication
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Users::class)] // Оставляем "Users"
+    #[ORM\ManyToOne(targetEntity: Users::class)]
     #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id", nullable: true)]
     private ?Users $user = null;
 
@@ -69,16 +69,6 @@ class MailVeryfication
         return $this;
     }
 
-    public function isVerified(): bool
-    {
-        return $this->is_verified;
-    }
-
-    public function setIsVerified(bool $is_verified): self
-    {
-        $this->is_verified = $is_verified;
-        return $this;
-    }
 
     public function getCreatedAt(): \DateTimeInterface
     {

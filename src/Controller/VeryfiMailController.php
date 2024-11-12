@@ -4,7 +4,6 @@
 namespace App\Controller;
 
 
-namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,9 +41,7 @@ class VeryfiMailController extends AbstractController
         try{
             $veryfi = $this->veryfiMailCode->veryfi($email, $code);
             if ($veryfi)
-            {
                 return new JsonResponse('Почта подтверждена', 201);
-            }
         }catch(\InvalidArgumentException $e){
             return new JsonResponse(['error' => 'Error: ' . $e->getMessage()], 400);
         };

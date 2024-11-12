@@ -21,7 +21,7 @@ class CheckTableMail
     {
         $byEmail = $this->entityManager->getRepository(MailVeryfication::class)->findOneBy(['email' => $email]);
 
-        if (!$byEmail) {
+        if ($byEmail) {
             return false;
         }
 

@@ -24,7 +24,6 @@ class VeryfiMailCode
             ->setParameter('threshold', (new \DateTime())->modify('-2 minutes'))
             ->execute();
 
-
         $repository = $this->entityManager->getRepository(MailVeryfication::class);
 
         $verification = $repository->findOneBy(['email' => $email, 'code' => $code]);
@@ -33,7 +32,7 @@ class VeryfiMailCode
             $repositoryUsers = $this->entityManager->getRepository(Users::class);
             $user = $repositoryUsers->findOneBy(['email' => $email]);
             if ($user) {
-                $user->setIsVerified(true);
+                $user->setVerified(true);
                 $this->entityManager->flush();
                 return true;
             }

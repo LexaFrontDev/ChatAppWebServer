@@ -6,17 +6,22 @@ namespace App\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Entity\Users;
+use App\Service\SendCode;
 use App\Service\GetVeryfed;
+
+
 
 #[AsService]
 class LoginService
 {
+    private SendCode $sendCode;
     private GetVeryfed $getVeryfed;
     private UserPasswordHasherInterface $hasher;
     private EntityManagerInterface $entityManager;
 
-    public function __construct(GetVeryfed $getVeryfed, UserPasswordHasherInterface $hasher, EntityManagerInterface $entityManager)
+    public function __construct(SendCode $sendCode, GetVeryfed $getVeryfed, UserPasswordHasherInterface $hasher, EntityManagerInterface $entityManager)
     {
+        $this->sendCode = $sendCode;
         $this->getVeryfed =  $getVeryfed;
         $this->entityManager = $entityManager;
         $this->hasher = $hasher;
@@ -56,10 +61,16 @@ class LoginService
                 ];
             }
 
-            return [
-                'result' => 'Пожалуйста, подтвердите почту.',
-                'success' => false
-            ];
+
+            $sendCode = $this->sendCode->send($email);
+
+            if($sendCode){
+                return [
+                    'result' => 'Пожалуйста, подтвердите почту.',
+                    'success' => false
+                ];
+            }
+
         }
         throw new \InvalidArgumentException("Пользователь не найден");
     }

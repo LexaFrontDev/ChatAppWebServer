@@ -15,6 +15,10 @@ security:
             stateless: true
             provider: entity_provider
             jwt: ~
+        refresh:
+            pattern:  ^/api/token/refresh
+            stateless: true
+            security: false
 
 
 

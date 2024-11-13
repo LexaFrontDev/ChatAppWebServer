@@ -9,19 +9,22 @@ use App\Entity\Users;
 use App\Service\SendCode;
 use App\Service\GetVeryfed;
 use App\Service\TokenService;
-
+use App\Service\RefreshTokenService;
 
 #[AsService]
 class LoginService
 {
+    private $generateRefreshTokenService;
     private SendCode $sendCode;
     private GetVeryfed $getVeryfed;
     private UserPasswordHasherInterface $hasher;
     private EntityManagerInterface $entityManager;
     private TokenService $token;
 
-    public function __construct(TokenService $token, SendCode $sendCode, GetVeryfed $getVeryfed, UserPasswordHasherInterface $hasher, EntityManagerInterface $entityManager)
+    public function __construct(RefreshTokenService $generateRefreshTokenService,TokenService $token, SendCode $sendCode, GetVeryfed $getVeryfed, UserPasswordHasherInterface $hasher, EntityManagerInterface $entityManager)
     {
+
+        $this->generateRefreshTokenService = $generateRefreshTokenService;
         $this->token = $token;
         $this->sendCode = $sendCode;
         $this->getVeryfed =  $getVeryfed;
@@ -59,10 +62,12 @@ class LoginService
             if ($veryfed) {
 
 
-                $token = $this->token->createToken($user);
+                $AccToken = $this->token->createToken($user);
+                $refToken = $this->generateRefreshTokenService->generateToken($user);
 
                 return [
-                    'acc' => $token,
+                    'acc' => $AccToken,
+                    'ref' => $refToken,
                     'message' => 'Пользователь успешно за логинилься',
                     'success' => true
                 ];

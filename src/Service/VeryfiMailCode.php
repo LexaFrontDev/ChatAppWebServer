@@ -8,17 +8,18 @@ use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AsService;
 use App\Service\TokenService;
-
+use App\Service\RefreshTokenService;
 
 #[AsService]
 class VeryfiMailCode
 {
-
+    private $generateRefreshTokenService;
     private $token;
     private EntityManagerInterface $entityManager;
 
-    public function __construct(TokenService $token, EntityManagerInterface $entityManager)
+    public function __construct(RefreshTokenService $generateRefreshTokenService, TokenService $token, EntityManagerInterface $entityManager)
     {
+        $this->generateRefreshTokenService = $generateRefreshTokenService;
         $this->token = $token;
         $this->entityManager = $entityManager;
     }
@@ -39,10 +40,12 @@ class VeryfiMailCode
             $user = $repositoryUsers->findOneBy(['email' => $email]);
             if ($user) {
                 $user->setVerified(true);
-                $token = $this->token->createToken($user);
+                $AccToken = $this->token->createToken($user);
+                $refToken = $this->generateRefreshTokenService->generateToken($user);
                 $this->entityManager->flush();
                 return ([
-                    'acc' => $token,
+                    'acc' => $AccToken,
+                    'ref' => $refToken,
                     'message' => 'Почта успешно верифицирована',
                     'success' => true,
                 ]);

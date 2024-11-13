@@ -14,16 +14,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Service\CheckUsersTable;
 use App\Service\SendCode;
-
+use App\Service\TokenService;
 
 class RegisterController extends AbstractController
 {
+    private $token;
     private SendCode $sendCode;
     private EntityManagerInterface $entityManager;
     private CheckUsersTable $checkUsersTable;
 
-    public function __construct(SendCode $sendCode,CheckUsersTable $checkUsersTable, EntityManagerInterface $entityManager)
+    public function __construct(TokenService $token,SendCode $sendCode,CheckUsersTable $checkUsersTable, EntityManagerInterface $entityManager)
     {
+        $this->token = $token;
         $this->sendCode = $sendCode;
         $this->checkUsersTable = $checkUsersTable;
         $this->entityManager = $entityManager;
@@ -70,10 +72,13 @@ class RegisterController extends AbstractController
             $entityManager->flush();
 
 
-
+            $token =  $this->token->createToken($user);
             $sendCode = $this->sendCode->send($email);
 
-            return $this->json(['message' => 'Регистрация прошла успешно! пожалуйста подтвердите свою почту!'], Response::HTTP_CREATED);
+            return $this->json([
+                'acc' => $token,
+                'message' => 'Регистрация прошла успешно! пожалуйста подтвердите свою почту!'
+            ], Response::HTTP_CREATED);
         }
 
         return $this->json([

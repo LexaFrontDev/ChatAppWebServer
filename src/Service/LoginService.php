@@ -8,7 +8,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Entity\Users;
 use App\Service\SendCode;
 use App\Service\GetVeryfed;
-
+use App\Service\TokenService;
 
 
 #[AsService]
@@ -18,9 +18,11 @@ class LoginService
     private GetVeryfed $getVeryfed;
     private UserPasswordHasherInterface $hasher;
     private EntityManagerInterface $entityManager;
+    private TokenService $token;
 
-    public function __construct(SendCode $sendCode, GetVeryfed $getVeryfed, UserPasswordHasherInterface $hasher, EntityManagerInterface $entityManager)
+    public function __construct(TokenService $token, SendCode $sendCode, GetVeryfed $getVeryfed, UserPasswordHasherInterface $hasher, EntityManagerInterface $entityManager)
     {
+        $this->token = $token;
         $this->sendCode = $sendCode;
         $this->getVeryfed =  $getVeryfed;
         $this->entityManager = $entityManager;
@@ -55,7 +57,12 @@ class LoginService
             $veryfed = $this->getVeryfed->getVeryFed($email);
 
             if ($veryfed) {
+
+
+                $token = $this->token->createToken($user);
+
                 return [
+                    'acc' => $token,
                     'message' => 'Пользователь успешно за логинилься',
                     'success' => true
                 ];

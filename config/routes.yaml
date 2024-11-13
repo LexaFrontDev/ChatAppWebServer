@@ -22,8 +22,6 @@ TestMailer:
     path: api/test/mailer
     controller: App/Controller/MailerTest::test
 
-
-
 Login:
     path: /api/login
     controller: App\Controller\LoginController::login

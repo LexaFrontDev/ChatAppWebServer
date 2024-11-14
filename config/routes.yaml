@@ -5,7 +5,6 @@ controllers:
     type: attribute
 
 
-
 Register:
     path: api/register
     controller: App\Controller\RegisterController::register
@@ -24,14 +23,17 @@ Login:
 
 gesdinet_jwt_refresh_token:
     path: /api/token/refresh
-    controller: gesdinet.jwtrefreshtoken.refresh
+    controller: App\Controller\RefreshTokenController::refresh
     methods: [POST]
 
 
-
-test:
-    path: /api/tests
-    controller: App\Controller\TestService::test
+SendMessage:
+    path: /api/sendMessage
+    controller: App\Controller\SendMessage::sendMes
     methods: POST
 
 
+GetMessages:
+    path: /api/getMessages
+    controller: App\Controller\GetMessages::get
+    methods: POST

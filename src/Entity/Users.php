@@ -6,6 +6,11 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use App\Entity\Messages;
+
+
 
 #[ORM\Entity]
 #[ORM\Table(name: "Users")]
@@ -30,6 +35,13 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $is_verified = false;
+
+
+    #[ORM\OneToMany(mappedBy: "sender", targetEntity: Messages::class)]
+    private Collection $sentMessages;
+
+    #[ORM\OneToMany(mappedBy: "receiver", targetEntity: Messages::class)]
+    private Collection $receivedMessages;
 
     public function getId(): ?int
     {
@@ -98,6 +110,23 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->is_verified = $verified;
         return $this;
+    }
+
+
+    public function __construct()
+    {
+        $this->sentMessages = new ArrayCollection();
+        $this->receivedMessages = new ArrayCollection();
+    }
+
+    public function getSentMessages(): Collection
+    {
+        return $this->sentMessages;
+    }
+
+    public function getReceivedMessages(): Collection
+    {
+        return $this->receivedMessages;
     }
 
 

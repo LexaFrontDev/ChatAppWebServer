@@ -25,6 +25,9 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $password = null;
 
+    #[ORM\Column(name: 'roles', type: "json", nullable: false)]
+    private $roles = [];
+
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $is_verified = false;
 
@@ -68,7 +71,13 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getRoles(): array
     {
-        return ['ROLE_USER'];
+        return $this->roles;
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+        return $this;
     }
 
     public function eraseCredentials(): void

@@ -72,7 +72,9 @@ class RegisterController extends AbstractController
                 )
             );
 
-            $entityManager->persist($user);
+
+            $setRole = $user->setRoles(['ROLE_USER']);
+            $entityManager->persist($user, $setRole);
             $entityManager->flush();
 
 

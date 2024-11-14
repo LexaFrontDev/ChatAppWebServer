@@ -41,11 +41,9 @@ class VeryfiMailCode
             if ($user) {
                 $user->setVerified(true);
                 $AccToken = $this->token->createToken($user);
-                $refToken = $this->generateRefreshTokenService->generateToken($user);
                 $this->entityManager->flush();
                 return ([
                     'acc' => $AccToken,
-                    'ref' => $refToken,
                     'message' => 'Почта успешно верифицирована',
                     'success' => true,
                 ]);

@@ -11,16 +11,11 @@ Register:
     controller: App\Controller\RegisterController::register
     methods: POST
 
-
-
 veryfiEmail:
     path: /api/veryfiEmail
     controller: App\Controller\VeryfiMailController::veryfi
     methods: POST
 
-TestMailer:
-    path: api/test/mailer
-    controller: App/Controller/MailerTest::test
 
 Login:
     path: /api/login
@@ -31,3 +26,12 @@ gesdinet_jwt_refresh_token:
     path: /api/token/refresh
     controller: gesdinet.jwtrefreshtoken.refresh
     methods: [POST]
+
+
+
+test:
+    path: /api/tests
+    controller: App\Controller\TestService::test
+    methods: POST
+
+

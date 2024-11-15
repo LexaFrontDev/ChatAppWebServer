@@ -18,11 +18,11 @@ class Messages
     #[ORM\Column(name: "id_message", type: Types::INTEGER)]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Users::class, inversedBy: "sentMessages")]
+    #[ORM\ManyToOne(targetEntity: Users::class, inversedBy: "sentMessages", fetch: "EAGER")]
     #[ORM\JoinColumn(name: "sender_id", referencedColumnName: "id", nullable: false)]
     private ?Users $sender = null;
 
-    #[ORM\ManyToOne(targetEntity: Users::class, inversedBy: "receivedMessages")]
+    #[ORM\ManyToOne(targetEntity: Users::class, inversedBy: "receivedMessages", fetch: "EAGER")]
     #[ORM\JoinColumn(name: "receiver_id", referencedColumnName: "id", nullable: false)]
     private ?Users $receiver = null;
 

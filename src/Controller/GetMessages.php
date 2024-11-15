@@ -24,10 +24,9 @@ class GetMessages extends AbstractController
     public function get(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        $id = $data['receiver_id'] ?? '';
 
         try{
-            $get = $this->getMessagesService->getAllMessage($id);
+            $get = $this->getMessagesService->getAllMessages();
             return new JsonResponse($get, 201);
         }catch (\InvalidArgumentException $e)
         {

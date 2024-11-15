@@ -3,32 +3,41 @@
 
 namespace App\Service;
 
-use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Users;
 use App\Entity\Messages;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 
 #[AsService]
 class GetMessagesService
 {
-    private  $entityManager;
-    private $logger;
+    private Security $security;
+    private LoggerInterface $logger;
+    private EntityManagerInterface $entityManager;
 
-
-    public function __construct(LoggerInterface $logger,EntityManagerInterface $entityManager)
+    public function __construct(Security $security, LoggerInterface $logger, EntityManagerInterface $entityManager)
     {
+        $this->security = $security;
         $this->logger = $logger;
         $this->entityManager = $entityManager;
     }
 
-    public function getAllMessage($id)
+
+    public function getAllMessages()
     {
-        $messages = $this->entityManager->getRepository(Messages::class)
-            ->findBy(['receiver' => $id]);
+        $receiver = $this->security->getUser();
 
-
-        if (empty($messages)) {
-            throw new \InvalidArgumentException("Сообщения для получателя не найдены");
+        if (!$receiver instanceof Users) {
+            throw new \RuntimeException("Пользователь не аутентифицирован");
         }
+
+        $messages = $this->entityManager->getRepository(Messages::class)
+            ->findBy(['receiver' => $receiver]);
+
+//        if (empty($messages)) {
+//            throw new \RuntimeException("Сообщения для пользователя не найдены,");
+//        }
 
 
         $result = [];

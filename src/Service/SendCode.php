@@ -4,9 +4,9 @@
 
 
 
-    namespace App\Service;
+namespace App\Service;
 
-    use Doctrine\ORM\EntityManagerInterface;
+    use App\Singleton\EntityManagerSingleton;
     use App\Entity\MailVeryfication;
     use Symfony\Component\Mailer\MailerInterface;
     use Symfony\Component\Mime\Email;
@@ -16,14 +16,14 @@
     #[AsService]
     class SendCode
     {
-        private EntityManagerInterface $entityManager;
+        private EntityManagerSingleton $entityManager;
         private MailerInterface $mailer;
         private CheckTableMail $checkTableMail;
         private LoggerInterface $logger;
 
         public function __construct(
             CheckTableMail $checkTableMail,
-            EntityManagerInterface $entityManager,
+            EntityManagerSingleton $entityManager,
             MailerInterface $mailer,
             LoggerInterface $logger
         ) {

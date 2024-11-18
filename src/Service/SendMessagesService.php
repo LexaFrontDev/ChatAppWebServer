@@ -5,26 +5,31 @@ namespace App\Service;
 
 use App\Entity\Messages;
 use App\Entity\Users;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Singleton\EntityManagerSingleton;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 #[AsService]
 class SendMessagesService
 {
-    private EntityManagerInterface $entityManager;
+    private EntityManagerSingleton $entityManager;
+    private Security $security;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerSingleton $entityManager, Security $security)
     {
         $this->entityManager = $entityManager;
+        $this->security = $security;
     }
 
-    public function sendMessages($senderId, $receiverId, string $content)
+    public function sendMessages(int $receiverId, string $content)
     {
-        $sender = $this->entityManager->getRepository(Users::class)->find($senderId);
-        $receiver = $this->entityManager->getRepository(Users::class)->find($receiverId);
+        $sender = $this->security->getUser();
 
-        if (!$sender) {
-            throw new \InvalidArgumentException("Отправитель не найден");
+        if (!$sender instanceof Users) {
+            throw new UnauthorizedHttpException('Bearer', 'Отправитель не авторизован');
         }
+
+        $receiver = $this->entityManager->getRepository(Users::class)->find($receiverId);
 
         if (!$receiver) {
             throw new \InvalidArgumentException("Получатель не найден");
@@ -34,8 +39,9 @@ class SendMessagesService
         $message->setSender($sender);
         $message->setReceiver($receiver);
         $message->setContent($content);
-        $this->entityManager->persist($message);
-        $this->entityManager->flush();
+        $this->entityManager->save($message);
+
         return true;
     }
 }
+

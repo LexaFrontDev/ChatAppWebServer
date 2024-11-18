@@ -3,7 +3,8 @@
 
 namespace App\Service;
 
-use Doctrine\ORM\EntityManagerInterface;
+
+use App\Singleton\EntityManagerSingleton;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Entity\Users;
 use App\Service\SendCode;
@@ -18,10 +19,10 @@ class LoginService
     private SendCode $sendCode;
     private GetVeryfed $getVeryfed;
     private UserPasswordHasherInterface $hasher;
-    private EntityManagerInterface $entityManager;
+    private EntityManagerSingleton $entityManager;
     private TokenService $token;
 
-    public function __construct(RefreshTokenService $generateRefreshTokenService,TokenService $token, SendCode $sendCode, GetVeryfed $getVeryfed, UserPasswordHasherInterface $hasher, EntityManagerInterface $entityManager)
+    public function __construct(RefreshTokenService $generateRefreshTokenService,TokenService $token, SendCode $sendCode, GetVeryfed $getVeryfed, UserPasswordHasherInterface $hasher, EntityManagerSingleton $entityManager)
     {
 
         $this->generateRefreshTokenService = $generateRefreshTokenService;

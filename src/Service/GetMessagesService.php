@@ -5,22 +5,19 @@ namespace App\Service;
 
 use App\Entity\Users;
 use App\Entity\Messages;
-use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
+use App\Singleton\EntityManagerSingleton;
 use Symfony\Bundle\SecurityBundle\Security;
 
 #[AsService]
 class GetMessagesService
 {
+    private EntityManagerSingleton $entityManagerSingleton;
     private Security $security;
-    private LoggerInterface $logger;
-    private EntityManagerInterface $entityManager;
 
-    public function __construct(Security $security, LoggerInterface $logger, EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerSingleton $entityManagerSingleton,Security $security)
     {
+        $this->entityManagerSingleton = $entityManagerSingleton;
         $this->security = $security;
-        $this->logger = $logger;
-        $this->entityManager = $entityManager;
     }
 
 
@@ -32,13 +29,8 @@ class GetMessagesService
             throw new \RuntimeException("Пользователь не аутентифицирован");
         }
 
-        $messages = $this->entityManager->getRepository(Messages::class)
+        $messages = $this->entityManagerSingleton->getRepository(Messages::class)
             ->findBy(['receiver' => $receiver]);
-
-//        if (empty($messages)) {
-//            throw new \RuntimeException("Сообщения для пользователя не найдены,");
-//        }
-
 
         $result = [];
         foreach ($messages as $message) {

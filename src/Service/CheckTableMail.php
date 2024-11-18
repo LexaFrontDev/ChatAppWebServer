@@ -4,22 +4,25 @@
 namespace App\Service;
 
 use App\Entity\MailVeryfication;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Singleton\EntityManagerSingleton;
+
 
 #[AsService]
 class CheckTableMail
 {
 
-    private EntityManagerInterface $entityManager;
+    private EntityManagerSingleton $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager)
+
+    public function __construct(EntityManagerSingleton $entityManager)
     {
         $this->entityManager = $entityManager;
     }
 
     public function check($email)
     {
-        $byEmail = $this->entityManager->getRepository(MailVeryfication::class)->findOneBy(['email' => $email]);
+        $byEmail = $this->entityManager->getRepository(MailVeryfication::class)
+            ->findOneBy(['email' => $email]);
 
         if ($byEmail) {
             return false;

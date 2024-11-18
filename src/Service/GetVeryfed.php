@@ -5,18 +5,17 @@ namespace App\Service;
 
 
 use App\Entity\Users;
-use Doctrine\ORM\EntityManagerInterface;
-
+use App\Singleton\EntityManagerSingleton;
 
 
 #[AsService]
 class GetVeryfed
 {
 
-    private EntityManagerInterface $entityManager;
+    private EntityManagerSingleton $entityManager;
 
 
-    public function __construct( EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerSingleton $entityManager)
     {
         $this->entityManager = $entityManager;
     }

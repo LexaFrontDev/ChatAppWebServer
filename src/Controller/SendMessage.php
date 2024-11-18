@@ -28,13 +28,12 @@ class SendMessage extends AbstractController
     public function sendMes(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        $idSender = $data['sender_id'] ?? '';
         $idReceiver = $data['receiver_id'] ?? '';
         $message = $data['content'] ?? '';
 
 
         try{
-            $send = $this->sendMessage->sendMessages($idSender, $idReceiver, $message);
+            $send = $this->sendMessage->sendMessages($idReceiver, $message);
             return new JsonResponse('Вы успешно отправили сообщение', 201);
         }catch (\InvalidArgumentException $e)
         {

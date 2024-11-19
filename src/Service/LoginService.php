@@ -8,27 +8,26 @@ use App\Singleton\EntityManagerSingleton;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Entity\Users;
 use App\Service\SendCode;
-use App\Service\GetVeryfed;
 use App\Service\TokenService;
+use App\Facade\UserFacade;
 use App\Service\RefreshTokenService;
 
 #[AsService]
 class LoginService
 {
+    private $usersFacade;
     private $generateRefreshTokenService;
     private SendCode $sendCode;
-    private GetVeryfed $getVeryfed;
     private UserPasswordHasherInterface $hasher;
     private EntityManagerSingleton $entityManager;
     private TokenService $token;
 
-    public function __construct(RefreshTokenService $generateRefreshTokenService,TokenService $token, SendCode $sendCode, GetVeryfed $getVeryfed, UserPasswordHasherInterface $hasher, EntityManagerSingleton $entityManager)
+    public function __construct(UserFacade $usersFacade,RefreshTokenService $generateRefreshTokenService,TokenService $token, SendCode $sendCode,  UserPasswordHasherInterface $hasher, EntityManagerSingleton $entityManager)
     {
-
+        $this->usersFacade = $usersFacade;
         $this->generateRefreshTokenService = $generateRefreshTokenService;
         $this->token = $token;
         $this->sendCode = $sendCode;
-        $this->getVeryfed =  $getVeryfed;
         $this->entityManager = $entityManager;
         $this->hasher = $hasher;
     }
@@ -58,11 +57,9 @@ class LoginService
             if (!$this->hasher->isPasswordValid($user, $password)) {
                 throw new \InvalidArgumentException("Неверный пароль");
             }
-            $veryfed = $this->getVeryfed->getVeryFed($email);
+            $isVerified = $this->usersFacade->isVerified($email);
 
-            if ($veryfed) {
-
-
+            if ($isVerified) {
                 $AccToken = $this->token->createToken($user);
                 $refToken = $this->generateRefreshTokenService->generateToken($user);
 
@@ -74,11 +71,12 @@ class LoginService
                 ];
             }
 
-
+            $AccToken = $this->token->createToken($user);
             $sendCode = $this->sendCode->send($email);
 
             if($sendCode){
                 return [
+                    'acc' => $AccToken,
                     'result' => 'Пожалуйста, подтвердите почту.',
                     'success' => false
                 ];

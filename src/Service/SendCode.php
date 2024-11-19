@@ -10,33 +10,29 @@ namespace App\Service;
     use App\Entity\MailVeryfication;
     use Symfony\Component\Mailer\MailerInterface;
     use Symfony\Component\Mime\Email;
-    use App\Service\CheckTableMail;
-    use Psr\Log\LoggerInterface;
+    use App\Facade\MailVeryficationFacade;
 
     #[AsService]
     class SendCode
     {
         private EntityManagerSingleton $entityManager;
         private MailerInterface $mailer;
-        private CheckTableMail $checkTableMail;
-        private LoggerInterface $logger;
+        private MailVeryficationFacade $mail;
 
         public function __construct(
-            CheckTableMail $checkTableMail,
+            MailVeryficationFacade $mail,
             EntityManagerSingleton $entityManager,
-            MailerInterface $mailer,
-            LoggerInterface $logger
+            MailerInterface $mailer
         ) {
-            $this->checkTableMail = $checkTableMail;
+            $this->mail = $mail;
             $this->entityManager = $entityManager;
             $this->mailer = $mailer;
-            $this->logger = $logger;
         }
 
         public function send($email)
         {
             $code = random_int(100000, 999999);
-            $existing = $this->checkTableMail->check($email);
+            $existing = $this->mail->isMailUnique($email);
 
             if ($existing) {
                 $existing->setEmail($email);
@@ -44,11 +40,7 @@ namespace App\Service;
                 $existing->setCreatedAt(new \DateTime());
                 $this->entityManager->persist($existing);
             } else {
-                $newVerification = new MailVeryfication();
-                $newVerification->setEmail($email);
-                $newVerification->setCode($code);
-                $newVerification->setCreatedAt(new \DateTime());
-                $this->entityManager->persist($newVerification);
+                $this->mail->createMail($email, $code);
             }
 
             try {

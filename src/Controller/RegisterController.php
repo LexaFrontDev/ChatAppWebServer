@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use App\Service\CheckUsersTable;
+use App\Facade\UserFacade;
 use App\Service\SendCode;
 use App\Service\TokenService;
 use App\Service\RefreshTokenService;
@@ -24,14 +24,14 @@ class RegisterController extends AbstractController
     private $token;
     private SendCode $sendCode;
     private EntityManagerInterface $entityManager;
-    private CheckUsersTable $checkUsersTable;
+    private $usersFacade;
 
-    public function __construct(RefreshTokenService $generateRefreshTokenService,TokenService $token,SendCode $sendCode,CheckUsersTable $checkUsersTable, EntityManagerInterface $entityManager)
+    public function __construct(UserFacade $usersFacade,RefreshTokenService $generateRefreshTokenService,TokenService $token,SendCode $sendCode, EntityManagerInterface $entityManager)
     {
         $this->generateRefreshTokenService = $generateRefreshTokenService;
         $this->token = $token;
         $this->sendCode = $sendCode;
-        $this->checkUsersTable = $checkUsersTable;
+        $this->usersFacade = $usersFacade;
         $this->entityManager = $entityManager;
     }
 
@@ -46,7 +46,7 @@ class RegisterController extends AbstractController
 
         $user = new Users();
 
-        $checkTable = $this->checkUsersTable->check($name, $email);
+        $checkTable = $this->usersFacade->isUserUnique($name, $email);
 
         if (!$checkTable) {
             return new JsonResponse('Пользователь с таким именем или почтой существуеть', 400);

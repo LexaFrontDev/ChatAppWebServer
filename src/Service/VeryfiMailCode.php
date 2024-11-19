@@ -36,8 +36,10 @@ class VeryfiMailCode
 
 
         if ($verification && (new \DateTime())->getTimestamp() - $verification->getCreatedAt()->getTimestamp() < 3600) {
+
             $repositoryUsers = $this->entityManager->getRepository(Users::class);
             $user = $repositoryUsers->findOneBy(['email' => $email]);
+
             if ($user) {
                 $user->setVerified(true);
                 $AccToken = $this->token->createToken($user);

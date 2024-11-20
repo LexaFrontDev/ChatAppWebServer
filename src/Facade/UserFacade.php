@@ -31,6 +31,7 @@ class UserFacade
         return !$userByName && !$userByEmail;
     }
 
+
     public function isVerified(string $email): bool
     {
         $user = $this->entityManagerSingleton->getRepository(Users::class)->findOneBy(['email' => $email]);

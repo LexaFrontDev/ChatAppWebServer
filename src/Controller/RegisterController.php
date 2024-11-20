@@ -12,10 +12,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use App\Facade\UserFacade;
 use App\Service\SendCode;
 use App\Service\TokenService;
 use App\Service\RefreshTokenService;
+use Symfony\Component\Form\FormFactoryInterface;
 
 
 class RegisterController extends AbstractController
@@ -24,14 +24,14 @@ class RegisterController extends AbstractController
     private $token;
     private SendCode $sendCode;
     private EntityManagerInterface $entityManager;
-    private $usersFacade;
+    private $formFactory;
 
-    public function __construct(UserFacade $usersFacade,RefreshTokenService $generateRefreshTokenService,TokenService $token,SendCode $sendCode, EntityManagerInterface $entityManager)
+    public function __construct(FormFactoryInterface $formFactory,RefreshTokenService $generateRefreshTokenService,TokenService $token,SendCode $sendCode, EntityManagerInterface $entityManager)
     {
+        $this->formFactory = $formFactory;
         $this->generateRefreshTokenService = $generateRefreshTokenService;
         $this->token = $token;
         $this->sendCode = $sendCode;
-        $this->usersFacade = $usersFacade;
         $this->entityManager = $entityManager;
     }
 
@@ -42,53 +42,42 @@ class RegisterController extends AbstractController
 
         $name = $data['name'] ?? '';
         $email = $data['email'] ?? '';
-        $plainPassword = $data['plainPassword'] ?? '';
+        $password = $data['password'] ?? '';
 
         $user = new Users();
 
-        $checkTable = $this->usersFacade->isUserUnique($name, $email);
 
-        if (!$checkTable) {
-            return new JsonResponse('Пользователь с таким именем или почтой существуеть', 400);
-        }
-
-        $form = $this->createForm(RegistrationFormType::class, $user, [
-            'csrf_protection' => false,
-            'allow_extra_fields' => true,
-        ]);
-
+        $form = $this->formFactory->createNamed('', RegistrationFormType::class, $user);
         $formData = [
             'name' => $name,
             'email' => $email,
-            'plainPassword' => $plainPassword,
+            'password' => $password,
         ];
 
         $form->submit($formData);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $data['plainPassword']
-                )
-            );
+            try{
+                $user->setPassword(
+                    $userPasswordHasher->hashPassword($user, $password)
+                );
 
+                $this->entityManager->persist($user);
+                $this->entityManager->flush();
 
-            $setRole = $user->setRoles(['ROLE_USER']);
-            $entityManager->persist($user, $setRole);
-            $entityManager->flush();
+                $AccToken =  $this->token->createToken($user);
+                $refToken = $this->generateRefreshTokenService->generateToken($user);
+                $sendCode = $this->sendCode->send($email);
 
+                return $this->json([
+                    'acc' => $AccToken,
+                    'ref' => $refToken,
+                    'message' => 'Регистрация прошла успешно! пожалуйста подтвердите свою почту!'
+                ], Response::HTTP_CREATED);
 
-            $AccToken =  $this->token->createToken($user);
-            $refToken = $this->generateRefreshTokenService->generateToken($user);
-            $sendCode = $this->sendCode->send($email);
-
-
-
-            return $this->json([
-                'acc' => $AccToken,
-                'ref' => $refToken,
-                'message' => 'Регистрация прошла успешно! пожалуйста подтвердите свою почту!'
-            ], Response::HTTP_CREATED);
+            }catch (\Exception $e){
+                return new JsonResponse(['error' => 'Error: ' . $e->getMessage()], 400);
+            }
         }
 
         return $this->json([

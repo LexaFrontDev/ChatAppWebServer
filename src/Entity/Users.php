@@ -9,11 +9,15 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use App\Entity\Messages;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
 
 #[ORM\Entity]
 #[ORM\Table(name: "Users")]
+#[UniqueEntity(fields: ["name"], message: "Имя уже используется")]
+#[UniqueEntity(fields: ["email"], message: "Email уже зарегистрирован")]
 class Users implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -22,16 +26,25 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255, unique: true)]
+    #[Assert\NotBlank(message: "Имя не должно быть пустым")]
+    #[Assert\Length( min: 2, max: 50, minMessage: "Имя должно содержать минимум {{ limit }} символа", maxMessage: "Имя не должно превышать {{ limit }} символов")]
     private ?string $name = null;
 
+
+
     #[ORM\Column(type: 'string', length: 255, unique: true)]
+    #[Assert\NotBlank(message: "Email обязателен")]
+    #[Assert\Email(message: "Неверный формат email")]
     private ?string $email = null;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "Пароль обязателен")]
+    #[Assert\Length(min: 8, minMessage: "Пароль должен быть минимум {{ limit }} символов")]
     private ?string $password = null;
 
     #[ORM\Column(name: 'roles', type: "json", nullable: false)]
-    private $roles = [];
+    #[Assert\NotBlank(message: "Роли обязательны")]
+    private $roles = ['ROLE_USER'];
 
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $is_verified = false;

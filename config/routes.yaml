@@ -37,3 +37,9 @@ GetMessages:
     path: /api/getMessages
     controller: App\Controller\GetMessages::get
     methods: POST
+
+
+ChangeName:
+    path: /api/change/name
+    controller: App\Controller\Change\ChangeNameController::changeName
+    methods: POST

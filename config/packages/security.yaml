@@ -34,6 +34,7 @@ security:
     access_control:
         - { path: ^/api/veryfiEmail, roles: ROLE_USER }
         - { path: ^/api/sendMessage, roles: ROLE_USER }
+        - { path: ^/api/change/name, roles: ROLE_USER }
 
 when@test:
     security:

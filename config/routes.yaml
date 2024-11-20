@@ -7,7 +7,7 @@ controllers:
 
 Register:
     path: api/register
-    controller: App\Controller\RegisterController::register
+    controller: App\Controller\Registeration\RegisterController::register
     methods: POST
 
 veryfiEmail:

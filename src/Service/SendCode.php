@@ -6,33 +6,37 @@
 
 namespace App\Service;
 
-    use App\Singleton\EntityManagerSingleton;
+    use Doctrine\ORM\EntityManagerInterface;
     use App\Entity\MailVeryfication;
     use Symfony\Component\Mailer\MailerInterface;
     use Symfony\Component\Mime\Email;
-    use App\Facade\MailVeryficationFacade;
+    use App\Repository\MailVeryficationRepository;
+    use App\Command\CreateMailVeryfication\CreateMailCommand;
 
     #[AsService]
     class SendCode
     {
-        private EntityManagerSingleton $entityManager;
+        private EntityManagerInterface $entityManager;
         private MailerInterface $mailer;
-        private MailVeryficationFacade $mail;
+        private MailVeryficationRepository $mailRepository;
+        private CreateMailCommand $createMailCommand;
 
         public function __construct(
-            MailVeryficationFacade $mail,
-            EntityManagerSingleton $entityManager,
-            MailerInterface $mailer
+            EntityManagerInterface $entityManager,
+            MailerInterface $mailer,
+            MailVeryficationRepository $mailRepository,
+            CreateMailCommand $createMailCommand
         ) {
-            $this->mail = $mail;
             $this->entityManager = $entityManager;
             $this->mailer = $mailer;
+            $this->mailRepository = $mailRepository;
+            $this->createMailCommand = $createMailCommand;
         }
 
         public function send($email)
         {
             $code = random_int(100000, 999999);
-            $existing = $this->mail->isMailUnique($email);
+            $existing = $this->mailRepository->isMailUnique($email);
 
             if ($existing) {
                 $existing->setEmail($email);
@@ -40,7 +44,7 @@ namespace App\Service;
                 $existing->setCreatedAt(new \DateTime());
                 $this->entityManager->persist($existing);
             } else {
-                $this->mail->createMail($email, $code);
+                $this->createMailCommand->createMail($email, $code);
             }
 
             try {

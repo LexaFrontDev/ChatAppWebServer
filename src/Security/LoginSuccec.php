@@ -7,26 +7,28 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
-use App\Facade\UserFacade;
+use App\Repository\UsersRepository;
 use App\Service\SendCode;
 use App\Service\TokenService;
 use App\Service\RefreshTokenService;
 
 class LoginSuccec implements AuthenticationSuccessHandlerInterface
 {
-    private UserFacade $userFacade;
     private SendCode $sendCode;
     private TokenService $token;
     private RefreshTokenService $generateRefreshTokenService;
+    private  UsersRepository $usersRepository;
+
 
     public function __construct(
+
+        UsersRepository $usersRepository,
         SendCode $sendCode,
-        UserFacade $userFacade,
         TokenService $token,
         RefreshTokenService $generateRefreshTokenService
     ) {
+        $this->usersRepository = $usersRepository;
         $this->sendCode = $sendCode;
-        $this->userFacade = $userFacade;
         $this->token = $token;
         $this->generateRefreshTokenService = $generateRefreshTokenService;
     }
@@ -37,7 +39,8 @@ class LoginSuccec implements AuthenticationSuccessHandlerInterface
         $email = $user->getUserIdentifier();
 
 
-        $isVerified = $this->userFacade->isVerified($email);
+        $isVerified = $this->usersRepository->isVerified($email);
+
 
         if ($isVerified) {
             $AccToken = $this->token->createToken($user);

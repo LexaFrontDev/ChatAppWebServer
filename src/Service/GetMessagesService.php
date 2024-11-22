@@ -5,18 +5,18 @@ namespace App\Service;
 
 use App\Entity\Users;
 use App\Entity\Messages;
-use App\Singleton\EntityManagerSingleton;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 
 #[AsService]
 class GetMessagesService
 {
-    private EntityManagerSingleton $entityManagerSingleton;
+    private EntityManagerInterface $entityManager;
     private Security $security;
 
-    public function __construct(EntityManagerSingleton $entityManagerSingleton,Security $security)
+    public function __construct(EntityManagerInterface $entityManager,Security $security)
     {
-        $this->entityManagerSingleton = $entityManagerSingleton;
+        $this->entityManager = $entityManager;
         $this->security = $security;
     }
 
@@ -29,7 +29,7 @@ class GetMessagesService
             throw new \RuntimeException("Пользователь не аутентифицирован");
         }
 
-        $messages = $this->entityManagerSingleton->getRepository(Messages::class)
+        $messages = $this->entityManager->getRepository(Messages::class)
             ->findBy(['receiver' => $receiver]);
 
         $result = [];

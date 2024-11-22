@@ -5,21 +5,21 @@ namespace App\Service;
 
 
 use App\Entity\Users;
-use App\Singleton\EntityManagerSingleton;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
-use App\Facade\MessagesFacade;
+use App\Command\CreateMessages\CreateMessagesCommand;
 
 #[AsService]
 class SendMessagesService
 {
-    private EntityManagerSingleton $entityManager;
+    private EntityManagerInterface $entityManager;
     private Security $security;
-    private $messagesFacade;
+    private $messagesCommand;
 
-    public function __construct(MessagesFacade $messagesFacade, EntityManagerSingleton $entityManager, Security $security)
+    public function __construct(CreateMessagesCommand $messagesCommand, EntityManagerInterface $entityManager, Security $security)
     {
-        $this->messagesFacade = $messagesFacade;
+        $this->messagesCommand = $messagesCommand;
         $this->entityManager = $entityManager;
         $this->security = $security;
     }
@@ -38,7 +38,7 @@ class SendMessagesService
             throw new \InvalidArgumentException("Получатель не найден");
         }
 
-        $this->messagesFacade->createMessages($sender, $receiver, $content);
+        $this->messagesCommand->createMessages($sender, $receiver, $content);
 
 
         return true;

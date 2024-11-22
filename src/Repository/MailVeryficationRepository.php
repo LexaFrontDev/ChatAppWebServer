@@ -16,28 +16,28 @@ class MailVeryficationRepository extends ServiceEntityRepository
         parent::__construct($registry, MailVeryfication::class);
     }
 
-    //    /**
-    //     * @return MailVeryfication[] Returns an array of MailVeryfication objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('m')
-    //            ->andWhere('m.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('m.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
 
-    //    public function findOneBySomeField($value): ?MailVeryfication
-    //    {
-    //        return $this->createQueryBuilder('m')
-    //            ->andWhere('m.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+
+    public function isMailUnique($email)
+    {
+        $isMail = $this->findOneBy(['email' => $email]);
+        if (!$isMail) {
+            return false;
+        }
+        return $isMail;
+    }
+
+
+    public function save($object)
+    {
+        $this->persist($object);
+        $this->flush();
+    }
+
+    public function persist($entity)
+    {
+        MailVeryfication::persist($entity);
+    }
+
+
 }

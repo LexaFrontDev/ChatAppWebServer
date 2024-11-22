@@ -3,7 +3,7 @@
 
 namespace App\Service;
 
-use App\Singleton\EntityManagerSingleton;
+use Doctrine\ORM\EntityManagerInterface;
 use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -13,9 +13,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class RefreshTokenService
 {
     private RefreshTokenManagerInterface $refreshTokenManager;
-    private EntityManagerSingleton $entityManager;
+    private EntityManagerInterface $entityManager;
 
-    public function __construct(RefreshTokenManagerInterface $refreshTokenManager, EntityManagerSingleton $entityManager)
+    public function __construct(RefreshTokenManagerInterface $refreshTokenManager, EntityManagerInterface $entityManager)
     {
         $this->refreshTokenManager = $refreshTokenManager;
         $this->entityManager = $entityManager;
@@ -27,8 +27,8 @@ class RefreshTokenService
         $refreshToken->setUsername($user->getName());
         $refreshToken->setRefreshToken(bin2hex(random_bytes(32)));
         $refreshToken->setValid((new \DateTime())->modify('+1 month'));
-        $this->entityManager->save($refreshToken);
-
+        $this->entityManager->persist($refreshToken);
+        $this->entityManager->flush();
 
         $token = $refreshToken->getRefreshToken();
         return $token;

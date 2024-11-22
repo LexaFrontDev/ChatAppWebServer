@@ -7,15 +7,20 @@ use App\Entity\Users;
 use App\Entity\Messages;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use App\Service\EncryptMessages\EncryptionService;
+
 
 #[AsService]
 class GetMessagesService
 {
+    private EncryptionService $encryptService;
     private EntityManagerInterface $entityManager;
     private Security $security;
 
-    public function __construct(EntityManagerInterface $entityManager,Security $security)
+
+    public function __construct(EncryptionService $encryptService, EntityManagerInterface $entityManager,Security $security)
     {
+        $this->encryptService = $encryptService;
         $this->entityManager = $entityManager;
         $this->security = $security;
     }
@@ -35,6 +40,9 @@ class GetMessagesService
         $result = [];
         foreach ($messages as $message) {
             $sender = $message->getSender();
+            $content = $message->getContent();
+            $iv = $message->getIv();
+            $messageU = $this->encryptService->decryptMessage($content, $iv);
 
             $result[] = [
                 'sender' => [
@@ -42,7 +50,7 @@ class GetMessagesService
                     'email' => $sender ? $sender->getEmail() : null,
                     'name' => $sender ? $sender->getName() : null,
                 ],
-                'message' => $message->getContent(),
+                'message' => $messageU,
                 'timeSend' => $message->getCreatedAt()->format('Y-m-d H:i:s'),
             ];
         }

@@ -34,7 +34,7 @@ class SendMessage extends AbstractController
 
         try{
             $send = $this->sendMessage->sendMessages($idReceiver, $message);
-            return new JsonResponse('Вы успешно отправили сообщение', 201);
+            return new JsonResponse($send, 201);
         }catch (\InvalidArgumentException $e)
         {
             return new JsonResponse(['error' => 'Error: ' . $e->getMessage()], 400);

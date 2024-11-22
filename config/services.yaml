@@ -1,5 +1,6 @@
 
 parameters:
+    jwt_public_key: '%kernel.project_dir%/config/jwt/public.pem'
 
 services:
     _defaults:

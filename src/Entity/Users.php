@@ -30,8 +30,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Length( min: 2, max: 50, minMessage: "Имя должно содержать минимум {{ limit }} символа", maxMessage: "Имя не должно превышать {{ limit }} символов")]
     private ?string $name = null;
 
-
-
     #[ORM\Column(type: 'string', length: 255, unique: true)]
     #[Assert\NotBlank(message: "Email обязателен")]
     #[Assert\Email(message: "Неверный формат email")]
@@ -55,6 +53,9 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: "receiver", targetEntity: Messages::class)]
     private Collection $receivedMessages;
+
+
+
 
     public function getId(): ?int
     {

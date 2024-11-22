@@ -29,6 +29,9 @@ class Messages
     #[ORM\Column(name: "content", type: Types::TEXT)]
     private ?string $content = null;
 
+    #[ORM\Column(type: 'string', length: 4096, nullable: true)]
+    private ?string $iv = null;
+
     #[ORM\Column(name: "created_at", type: Types::DATETIME_MUTABLE)]
     private \DateTime $createdAt;
 
@@ -82,5 +85,14 @@ class Messages
     }
 
 
+    public function getIv()
+    {
+        return $this->iv;
+    }
 
+
+    public function setIv($iv)
+    {
+        $this->iv = $iv;
+    }
 }

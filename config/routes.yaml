@@ -4,17 +4,15 @@ controllers:
         namespace: App\Controller
     type: attribute
 
-
 Register:
-    path: api/register
-    controller: App\Controller\Registeration\RegisterController::register
+    path: /api/register
+    controller: App\Controller\Registration\RegisterController::register
     methods: POST
 
-veryfiEmail:
-    path: /api/veryfiEmail
-    controller: App\Controller\VeryfiMailController::veryfi
+verifyEmail:
+    path: /api/verifyEmail
+    controller: App\Controller\VerifyMailController::verify
     methods: POST
-
 
 Login:
     path: /api/login
@@ -26,35 +24,27 @@ gesdinet_jwt_refresh_token:
     controller: App\Controller\RefreshTokenController::refresh
     methods: [POST]
 
-
 SendMessage:
     path: /api/sendMessage
-    controller: App\Controller\SendMessage::sendMes
+    controller: App\Controller\SendMessageController::sendMes
     methods: POST
-
 
 GetMessages:
     path: /api/getMessages
     controller: App\Controller\GetMessages::get
     methods: POST
 
-
 ChangeName:
     path: /api/change/name
     controller: App\Controller\Change\ChangeNameController::changeName
     methods: POST
-
-
 
 ChangeMessages:
     path: /api/change/messages
     controller: App\Controller\Change\ChangeMessageController::changeMess
     methods: POST
 
-
-
 DeleteMessages:
     path: /api/delete/message
     controller: App\Controller\Delete\DeleteMessagesController::deleteMess
     methods: POST
-

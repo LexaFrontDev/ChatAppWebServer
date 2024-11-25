@@ -48,3 +48,13 @@ DeleteMessages:
     path: /api/delete/message
     controller: App\Controller\Delete\DeleteMessagesController::deleteMess
     methods: POST
+
+ResetPasswordSend:
+    path: /api/reset/password/send
+    controller: App\Controller\Reset\ResetPasswordSendController::resetPassSend
+    methods: POST
+
+ResetPasswordResert:
+    path: /api/reset/password/reset
+    controller: App\Controller\Reset\ResetPasswordController::reset
+    methods: POST

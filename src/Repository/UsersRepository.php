@@ -15,9 +15,15 @@ class UsersRepository extends ServiceEntityRepository
     }
 
 
+
     public function findOneByName($name)
     {
         return $this->findOneBy(['name' => $name]);
+    }
+
+    public function findOneByEmail($email)
+    {
+        return $this->findOneBy(['email' => $email]);
     }
 
     public function isUserUnique($name, $email)
@@ -40,9 +46,10 @@ class UsersRepository extends ServiceEntityRepository
         return $user !== null && $user->isVerified();
     }
 
-    public function save($object)
+    public function save(Users $user)
     {
-        $this->persist($object);
-        $this->flush();
+        $entityManager = $this->getEntityManager();
+        $entityManager->persist($user);
+        $entityManager->flush();
     }
 }

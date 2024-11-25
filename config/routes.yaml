@@ -46,3 +46,10 @@ ChangeName:
 
 
 
+ChangeMessages:
+    path: /api/change/messages
+    controller: App\Controller\Change\ChangeMessageController::changeMess
+    methods: POST
+
+
+

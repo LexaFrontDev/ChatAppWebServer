@@ -50,6 +50,7 @@ class GetMessagesService
                     'email' => $sender ? $sender->getEmail() : null,
                     'name' => $sender ? $sender->getName() : null,
                 ],
+                'id_message' => $message->getId(),
                 'message' => $messageU,
                 'timeSend' => $message->getCreatedAt()->format('Y-m-d H:i:s'),
             ];

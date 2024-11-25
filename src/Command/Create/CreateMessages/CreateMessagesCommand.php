@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Command\CreateMessages;
+namespace App\Command\Create\CreateMessages;
 
 use App\Entity\Messages;
 use Doctrine\ORM\EntityManagerInterface;

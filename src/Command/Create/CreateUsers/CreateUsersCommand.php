@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Command\CreateUsers;
+namespace App\Command\Create\CreateUsers;
 
 use App\Repository\UsersRepository;
 use App\Entity\Users;

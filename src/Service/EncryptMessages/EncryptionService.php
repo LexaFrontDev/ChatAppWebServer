@@ -36,7 +36,6 @@ class EncryptionService
 
     public function decryptMessage(string $encryptedMessage, string $iv): string
     {
-
         $secretKey = file_get_contents($this->publicKeyPath);
 
         if ($secretKey === false) {

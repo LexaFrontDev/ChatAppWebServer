@@ -9,7 +9,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use App\Service\TokenService;
 use App\Service\RefreshTokenService;
 use App\Entity\RefreshToken;
-
+use App\Command\Delete\DeleteRefreshTokens\DeleteRefreshTokenCommand;
 
 
 #[AsService]
@@ -20,13 +20,16 @@ class ChangeNameService
     private EntityManagerInterface $entityManager;
     private Security $security;
     private RefreshTokenService $generateRefToken;
+    private DeleteRefreshTokenCommand $deleteRefreshTokens;
 
     public function __construct(
+        DeleteRefreshTokenCommand $deleteRefreshTokens,
         RefreshTokenService $generateRefToken,
         TokenService $updateTokenService,
         EntityManagerInterface $entityManager,
         Security $security
     ) {
+        $this->deleteRefreshTokens = $deleteRefreshTokens;
         $this->generateRefToken = $generateRefToken;
         $this->updateTokenService = $updateTokenService;
         $this->entityManager = $entityManager;
@@ -53,14 +56,9 @@ class ChangeNameService
             throw new \InvalidArgumentException("Пользователь не найден");
         }
 
-        $deleteToken = $this->entityManager->getRepository(RefreshToken::class)
-            ->findOneBy(['username' => $isChange->getName()]);
+        $deleteOldToken = $this->deleteRefreshTokens->deleteToken($isChange->getName());
 
-        if ($deleteToken) {
-            $this->entityManager->remove($deleteToken);
-            $this->entityManager->flush();
-        }
-
+    if($deleteOldToken){
         $isChange->setName($newName);
         $this->entityManager->persist($isChange);
         $this->entityManager->flush();
@@ -74,5 +72,6 @@ class ChangeNameService
             'ref' => $refToken,
             'messages' => 'Имя успешно изменено',
         ];
+    }
     }
 }

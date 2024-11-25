@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Command\CreateMailVeryfication;
+namespace App\Command\Create\CreateMailVeryfication;
 
 use App\Entity\MailVeryfication;
 use App\Repository\MailVeryficationRepository;

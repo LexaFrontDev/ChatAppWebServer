@@ -6,7 +6,7 @@ namespace App\Service\Delete;
 use App\Entity\Messages;
 use App\Entity\Users;
 use Symfony\Bundle\SecurityBundle\Security;
-use App\Command\DeleteMessages\DeleteMessageCommand;
+use App\Command\Delete\DeleteMessages\DeleteMessageCommand;
 use App\Service\TokenService;
 use Doctrine\ORM\EntityManagerInterface;
 

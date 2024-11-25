@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Command\UpdateMessages;
+namespace App\Command\Update\UpdateMessages;
 
 use App\Entity\Messages;
 use Doctrine\ORM\EntityManagerInterface;

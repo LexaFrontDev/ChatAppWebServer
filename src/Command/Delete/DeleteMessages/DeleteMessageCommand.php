@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Command\DeleteMessages;
+namespace App\Command\Delete\DeleteMessages;
 
 use App\Entity\Messages;
 use App\Entity\Users;

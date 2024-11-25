@@ -9,7 +9,8 @@ use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use App\Service\TokenService;
-use App\Command\UpdateMessages\UpdateMessages;
+use App\Command\Update\UpdateMessages\UpdateMessages;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 
 #[AsService]

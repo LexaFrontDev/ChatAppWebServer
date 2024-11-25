@@ -11,7 +11,7 @@ namespace App\Service;
     use Symfony\Component\Mailer\MailerInterface;
     use Symfony\Component\Mime\Email;
     use App\Repository\MailVeryficationRepository;
-    use App\Command\CreateMailVeryfication\CreateMailCommand;
+    use App\Command\Create\CreateMailVeryfication\CreateMailCommand;
 
     #[AsService]
     class SendCode

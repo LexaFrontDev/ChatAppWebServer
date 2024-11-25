@@ -25,8 +25,8 @@ gesdinet_jwt_refresh_token:
     methods: [POST]
 
 SendMessage:
-    path: /api/sendMessage
-    controller: App\Controller\SendMessageController::sendMes
+    path: /api/send/message
+    controller: App\Controller\SendMessage::sendMes
     methods: POST
 
 GetMessages:

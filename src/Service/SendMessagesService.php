@@ -7,7 +7,7 @@ use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
-use App\Command\CreateMessages\CreateMessagesCommand;
+use App\Command\Create\CreateMessages\CreateMessagesCommand;
 use App\Service\EncryptMessages\EncryptionService;
 
 

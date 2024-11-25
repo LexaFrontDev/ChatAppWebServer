@@ -53,3 +53,8 @@ ChangeMessages:
 
 
 
+DeleteMessages:
+    path: /api/delete/message
+    controller: App\Controller\Delete\DeleteMessagesController::deleteMess
+    methods: POST
+

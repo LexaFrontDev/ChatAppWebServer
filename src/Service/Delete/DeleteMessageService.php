@@ -57,7 +57,6 @@ class DeleteMessageService
             return [
                 'acc' => $accToken,
                 'message' => 'Сообщение успешно удален',
-                'succec' => true
             ];
         }
     }

@@ -28,9 +28,15 @@ class ChangeNameController extends AbstractController
 
         try{
             $isChange = $this->changeNameService->changeNameService($newName);
-            if($isChange){
-                return new JsonResponse($isChange, 201);
-            }
+            $accToken = $isChange['acc'];
+            $refToken = $isChange['ref'];
+            $messages = $isChange['messages'];
+
+            $response = new JsonResponse($messages, 201);
+            $response->headers->set('X-Acc-Token', $accToken);
+            $response->headers->set('X-Ref-Token', $refToken);
+            return $response;
+
         }catch (\Exception $e)
         {
             return new JsonResponse(['error' => 'Error: ' . $e->getMessage()], 400);

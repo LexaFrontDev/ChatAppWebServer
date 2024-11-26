@@ -30,9 +30,11 @@ class ChangeMessageController extends AbstractController
 
         try{
             $result = $this->changeMessages->changeMessages($messageID, $newMessages);
-            if($this){
-                return new JsonResponse($result, '201');
-            }
+            $accToken = $result['acc'];
+            $message = $result['messages'];
+            $response = new JsonResponse($message, 201);
+            $response->headers->set('X-Acc-Token', $accToken);
+            return $response;
         }catch (\Exception $e){
             return new JsonResponse(['error' => 'Error: ' . $e->getMessage()], 400);
         }

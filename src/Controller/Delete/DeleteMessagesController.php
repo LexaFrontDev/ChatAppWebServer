@@ -30,9 +30,11 @@ class DeleteMessagesController extends AbstractController
 
         try {
             $isDelete = $this->deleteMessage->delete($messageId);
-            if ($isDelete) {
-                return new JsonResponse(['success' => true], 201);
-            }
+            $accToken = $isDelete['acc'];
+            $message = $isDelete['message'];
+            $response = new JsonResponse($message, 201);
+            $response->headers->set('X-Acc-Token', $accToken);
+            return $response;
         } catch (\Exception $e) {
             return new JsonResponse(['error' => 'Error: ' . $e->getMessage()], 400);
         }

@@ -6,7 +6,7 @@ controllers:
 
 Register:
     path: /api/register
-    controller: App\Controller\Registration\RegisterController::register
+    controller: App\Controller\Registeration\RegisterController::register
     methods: POST
 
 verifyEmail:

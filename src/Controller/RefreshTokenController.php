@@ -50,6 +50,8 @@ class RefreshTokenController extends AbstractController
         }
 
         $token = $this->jwtManager->create($user);
-        return new JsonResponse(['acc' => $token], 201);
+        $response = new JsonResponse('Токен успешно создан', 201);
+        $response->headers->set('X-Acc-Token', $token);
+        return $response;
     }
 }

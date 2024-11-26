@@ -40,7 +40,11 @@ class VeryfiMailController extends AbstractController
 
         try{
             $veryfi = $this->veryfiMailCode->veryfi($email, $code);
-            return new JsonResponse($veryfi, Response::HTTP_OK);
+            $accToken = $veryfi['acc'];
+            $message = $veryfi['message'];
+            $response = new JsonResponse($message, 201);
+            $response->headers->set('X-Acc-Token', $accToken);
+            return $response;
         }catch(\InvalidArgumentException $e){
             return new JsonResponse(['error' => 'Error: ' . $e->getMessage()], 400);
         };

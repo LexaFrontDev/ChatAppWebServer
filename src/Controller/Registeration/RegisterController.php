@@ -69,12 +69,11 @@ class RegisterController extends AbstractController
                 $refToken = $this->generateRefreshTokenService->generateToken($user);
                 $sendCode = $this->sendCode->send($email);
 
-                return $this->json([
-                    'acc' => $AccToken,
-                    'ref' => $refToken,
-                    'message' => 'Регистрация прошла успешно! пожалуйста подтвердите свою почту!'
-                ], Response::HTTP_CREATED);
 
+                $response = new JsonResponse('Регистрация прошла успешно! пожалуйста подтвердите свою почту!', 201);
+                $response->headers->set('X-Acc-Token', $AccToken);
+                $response->headers->set('X-Res-Token', $refToken);
+                return $response;
             }catch (\Exception $e){
                 return new JsonResponse(['error' => 'Error: ' . $e->getMessage()], 400);
             }

@@ -47,7 +47,6 @@ class VeryfiMailCode
                 return ([
                     'acc' => $AccToken,
                     'message' => 'Почта успешно верифицирована',
-                    'success' => true,
                 ]);
             }
         }

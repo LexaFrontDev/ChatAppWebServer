@@ -27,7 +27,12 @@ class GetMessages extends AbstractController
 
         try{
             $get = $this->getMessagesService->getAllMessages();
-            return new JsonResponse($get, 201);
+            $accToken = $get['acc'];
+            $date = $get['date'];
+            $response = new JsonResponse($get, 201);
+            $response->headers->set('X-Acc-Token', $accToken);
+            $response->setData(['data' => $date]);
+            return $response;
         }catch (\InvalidArgumentException $e)
         {
             return new JsonResponse(['error' => 'Error: ' . $e->getMessage()], 400);

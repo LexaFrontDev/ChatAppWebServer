@@ -60,7 +60,6 @@ class ChangeMessageService
         if($isChange){
             $accToken = $this->updateTokenService->createToken($user);
             return [
-                'success' => true,
                 'acc' => $accToken,
                 'messages' => 'Сообщение успешно изменено',
             ];

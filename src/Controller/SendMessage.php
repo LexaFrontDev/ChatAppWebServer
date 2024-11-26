@@ -34,7 +34,11 @@ class SendMessage extends AbstractController
 
         try{
             $send = $this->sendMessage->sendMessages($idReceiver, $message);
-            return new JsonResponse($send, 201);
+            $accToken = $send['acc'];
+            $message = $send['messages'];
+            $response = new JsonResponse($message, 201);
+            $response->headers->set('X-Acc-Token', $accToken);
+            return $response;
         }catch (\InvalidArgumentException $e)
         {
             return new JsonResponse(['error' => 'Error: ' . $e->getMessage()], 400);

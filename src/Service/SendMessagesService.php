@@ -62,7 +62,7 @@ class SendMessagesService
             $accToken = $this->tokenService->createToken($sender);
 
             return [
-                'succes' => true,
+                'acc' => $accToken,
                 'messages' => 'Пользователь успешно отправил сообщение',
             ];
         }

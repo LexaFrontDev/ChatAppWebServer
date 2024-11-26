@@ -45,13 +45,10 @@ class LoginSuccec implements AuthenticationSuccessHandlerInterface
         if ($isVerified) {
             $AccToken = $this->token->createToken($user);
             $refToken = $this->generateRefreshTokenService->generateToken($user);
-
-            return new JsonResponse([
-                'acc' => $AccToken,
-                'ref' => $refToken,
-                'message' => 'Пользователь успешно за логинился',
-                'success' => true,
-            ]);
+            $response = new JsonResponse( 'Пользователь успешно за логинился', 201);
+            $response->headers->set('X-Acc-Token', $AccToken);
+            $response->headers->set('X-Ref-Token', $refToken);
+            return $response;
         }
 
 
@@ -59,11 +56,9 @@ class LoginSuccec implements AuthenticationSuccessHandlerInterface
         $sendCode = $this->sendCode->send($email);
 
         if ($sendCode) {
-            return new JsonResponse([
-                'acc' => $AccToken,
-                'result' => 'Пожалуйста, подтвердите почту.',
-                'success' => false,
-            ]);
+            $response = new JsonResponse( 'Пожалуйста, подтвердите почту.', 201);
+            $response->headers->set('X-Acc-Token', $AccToken);
+            return $response;
         }
 
         return new JsonResponse([

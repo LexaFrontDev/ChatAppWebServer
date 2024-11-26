@@ -32,10 +32,13 @@ class GetMessagesService
             throw new \RuntimeException("Пользователь не аутентифицирован");
         }
         $result = $this->getMessagesQuery->getMessages($receiver);
-        if($result){
+        if(empty($result)){
+            $accToken = $this->accToken->createToken($receiver);
+            $date = ['acc' => $accToken, 'date' => 'У пользователя нет активных чатов'];
+            return $date;
+        }
             $accToken = $this->accToken->createToken($receiver);
             $date = ['acc' => $accToken, 'date' => $result];
             return $date;
-        }
     }
 }

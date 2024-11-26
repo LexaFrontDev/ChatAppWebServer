@@ -10,8 +10,8 @@ class RegistrationTest extends WebTestCase
 {
     public function testRegisterWithDatabaseInteraction()
     {
-        $name = "LexaDev10";
-        $email = "LexaDev10@gmail.com";
+        $name = "LexaDev15";
+        $email = "LexaDev15@gmail.com";
         $password = "LexaDev1234";
         $client = static::createClient();
 
@@ -26,11 +26,9 @@ class RegistrationTest extends WebTestCase
         ], $data);
 
         $response = $client->getResponse();
-        $responseHeaders = $response->headers->all();
-        echo "Response Headers:\n";
-        var_dump($responseHeaders);
-        $content = $client->getResponse()->getContent();
-        $this->assertJson($content);
+        $this->assertEquals(201, $response->getStatusCode(), 'Expected status code 201');
+        $content = $response->getContent();
+        $this->assertJson($content, 'Response is not valid JSON');
         $data = json_decode($content, true);
         $this->assertIsArray($data);
     }

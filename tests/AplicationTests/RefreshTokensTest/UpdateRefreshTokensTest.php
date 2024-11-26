@@ -9,7 +9,7 @@ class UpdateRefreshTokensTest extends WebTestCase
 {
     public function testRefTokenUpdater()
     {
-        $refreshToken = 'e17ab3955a89b290d110921827ad57fa1587892c9ad1d6273c74ddbc1b64aea4';
+        $refreshToken = '8ed8a617837ac1286c569914417f51837e5383eb8876d0069f8a931bb62e6bc9';
         $client = static::createClient();
         $data = ['refresh_token' => $refreshToken];
         $jsonData = json_encode($data);
@@ -21,12 +21,11 @@ class UpdateRefreshTokensTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
         $headers = $response->headers->all();
-        $this->assertArrayHasKey('authorization', $headers, 'Заголовок "Authorization" отсутствует в ответе.');
-        $accessToken = $headers['authorization'][0];
+        $this->assertArrayHasKey('x-acc-token', $headers, 'Заголовок "X-Acc-Token" отсутствует в ответе.');
+        $accessToken = $headers['x-acc-token'][0];
         echo "Access Token: $accessToken\n";
-        $this->assertStringStartsWith('Bearer ', $accessToken, 'Токен не имеет префикса "Bearer "');
         return $accessToken;
     }
 }

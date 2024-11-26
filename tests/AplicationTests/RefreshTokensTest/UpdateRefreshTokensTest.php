@@ -4,14 +4,27 @@ namespace App\Tests\AplicationTests;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use App\Tests\AplicationTests\AuthTest\RegistrationTest;
 
 class UpdateRefreshTokensTest extends WebTestCase
 {
     public function testRefTokenUpdater()
     {
-        $refreshToken = '8ed8a617837ac1286c569914417f51837e5383eb8876d0069f8a931bb62e6bc9';
         $client = static::createClient();
-        $data = ['refresh_token' => $refreshToken];
+
+        $crawler = $client->request('POST', '/api/register', [], [], [
+            'CONTENT_TYPE' => 'application/json',
+        ], json_encode([
+            'name' => 'testuser',
+            'email' => 'testuser@gmail.com',
+            'password' => 'test1234'
+        ]));
+
+        $response = $client->getResponse();
+        $headers = $response->headers->all();
+        $refToken = $headers['x-ref-token'][0];
+
+        $data = ['refresh_token' => $refToken];
         $jsonData = json_encode($data);
 
         $client->request('POST', '/api/token/refresh', [], [], [
@@ -20,7 +33,6 @@ class UpdateRefreshTokensTest extends WebTestCase
         ], $jsonData);
 
         $response = $client->getResponse();
-
         $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
         $headers = $response->headers->all();
         $this->assertArrayHasKey('x-acc-token', $headers, 'Заголовок "X-Acc-Token" отсутствует в ответе.');

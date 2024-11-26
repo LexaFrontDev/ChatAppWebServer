@@ -32,7 +32,5 @@ class SendMessageTest extends WebTestCase
         $this->assertJson($content, 'Response is not valid JSON');
         $data = json_decode($content, true);
         $this->assertIsArray($data);
-
-
     }
 }

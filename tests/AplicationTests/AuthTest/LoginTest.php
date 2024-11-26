@@ -6,12 +6,13 @@ namespace App\Tests\AplicationTests\AuthTest;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class RegistrationTest extends WebTestCase
+class LoginTest extends WebTestCase
 {
-    public function testRegisterWithDatabaseInteraction()
+
+    public function testLogin()
     {
-        $name = "LexaDev15";
-        $email = "LexaDev15@gmail.com";
+        $name = "LexaDev1";
+        $email = "LexaDev1@gmail.com";
         $password = "LexaDev1234";
         $client = static::createClient();
 
@@ -21,7 +22,8 @@ class RegistrationTest extends WebTestCase
             'password' => $password,
         ]);
 
-        $crawler = $client->request('POST', '/api/register', [], [], [
+
+        $crawler = $client->request('POST', '/api/login', [], [], [
             'CONTENT_TYPE' => 'application/json',
         ], $data);
 
@@ -31,6 +33,6 @@ class RegistrationTest extends WebTestCase
         $this->assertJson($content, 'Response is not valid JSON');
         $data = json_decode($content, true);
         $this->assertIsArray($data);
-        return $response;
     }
+
 }

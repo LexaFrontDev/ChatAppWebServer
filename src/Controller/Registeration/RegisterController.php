@@ -72,7 +72,7 @@ class RegisterController extends AbstractController
 
                 $response = new JsonResponse('Регистрация прошла успешно! пожалуйста подтвердите свою почту!', 201);
                 $response->headers->set('X-Acc-Token', $AccToken);
-                $response->headers->set('X-Res-Token', $refToken);
+                $response->headers->set('X-Ref-Token', $refToken);
                 return $response;
             }catch (\Exception $e){
                 return new JsonResponse(['error' => 'Error: ' . $e->getMessage()], 400);

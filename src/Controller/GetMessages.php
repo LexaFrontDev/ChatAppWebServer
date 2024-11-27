@@ -29,7 +29,7 @@ class GetMessages extends AbstractController
             $get = $this->getMessagesService->getAllMessages();
             $accToken = $get['acc'];
             $date = $get['date'];
-            $response = new JsonResponse($get, 201);
+            $response = new JsonResponse($get, 200);
             $response->headers->set('X-Acc-Token', $accToken);
             $response->setData(['data' => $date]);
             return $response;

@@ -6,7 +6,7 @@ namespace App\Tests\Controller\Registration;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class RegistrationTest extends WebTestCase
+class RegistrationControllerTest extends WebTestCase
 {
 
 
@@ -26,11 +26,10 @@ class RegistrationTest extends WebTestCase
     {
         $client = $this->createClient();
         $client->request('POST', '/api/register', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
-            'name' => 'test1',
-            'email' => 'test1@gmail.com',
+            'name' => 'test',
+            'email' => 'test@gmail.com',
             'password' => 'test1234'
         ]));
-
 
         $response = $client->getResponse();
         $this->assertSame(Response::HTTP_CREATED, $response->getStatusCode());

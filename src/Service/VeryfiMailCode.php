@@ -6,7 +6,6 @@ namespace App\Service;
 use App\Entity\MailVeryfication;
 use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\DependencyInjection\Attribute\AsService;
 use App\Service\TokenService;
 use App\Service\RefreshTokenService;
 

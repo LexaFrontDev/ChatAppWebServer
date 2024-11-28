@@ -21,17 +21,27 @@ class CreateUsersFixtures extends Fixture
     }
 
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
-        $user = new Users();
-        $user->setName('test1');
-        $user->setEmail('test1@gmail.com');
+        $user1 = new Users();
+        $user1->setName('test1');
+        $user1->setEmail('test1@gmail.com');
         $password = 'test1234';
-        $hashPass  = $this->hasher->hashPassword($user, $password);
-        $user->setPassword($hashPass);
-        $manager->persist($user);
+        $hashPass = $this->hasher->hashPassword($user1, $password);
+        $user1->setPassword($hashPass);
+        $manager->persist($user1);
+
+        $user2 = new Users();
+        $user2->setName('test2');
+        $user2->setEmail('test2@gmail.com');
+        $password = 'test1234';
+        $hashPass = $this->hasher->hashPassword($user2, $password);
+        $user2->setPassword($hashPass);
+        $manager->persist($user2);
+
         $manager->flush();
     }
+
 
 
 }

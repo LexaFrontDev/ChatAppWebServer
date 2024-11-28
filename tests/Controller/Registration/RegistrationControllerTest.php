@@ -10,7 +10,7 @@ class RegistrationControllerTest extends WebTestCase
 {
 
 
-    public function testBadRequest()
+    public function testBadRequestRegisterController()
     {
         $client = $this->createClient();
         $client->request('POST', '/api/register');
@@ -18,11 +18,10 @@ class RegistrationControllerTest extends WebTestCase
 
         $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         $data = json_decode($response->getContent(), true);
-        var_dump($data);
     }
 
 
-    public function testResponse()
+    public function testResponseRegisterController()
     {
         $client = $this->createClient();
         $client->request('POST', '/api/register', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
@@ -33,9 +32,6 @@ class RegistrationControllerTest extends WebTestCase
 
         $response = $client->getResponse();
         $this->assertSame(Response::HTTP_CREATED, $response->getStatusCode());
-        $headers = $response->headers->all();
-        var_dump($headers);
         $data = json_decode($response->getContent(), true);
-        var_dump($data);
     }
 }

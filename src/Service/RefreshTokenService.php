@@ -4,36 +4,34 @@
 namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface;
+use Gesdinet\JWTRefreshTokenBundle\Generator\RefreshTokenGeneratorInterface;
+use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-
-
+use Symfony\Contracts\Service\Attribute\AsService;
 
 #[AsService]
 class RefreshTokenService
 {
-    private RefreshTokenManagerInterface $refreshTokenManager;
+    private RefreshTokenGeneratorInterface $refreshTokenGenerator;
     private EntityManagerInterface $entityManager;
 
-    public function __construct(RefreshTokenManagerInterface $refreshTokenManager, EntityManagerInterface $entityManager)
+    public function __construct(RefreshTokenGeneratorInterface $refreshTokenGenerator, EntityManagerInterface $entityManager)
     {
-        $this->refreshTokenManager = $refreshTokenManager;
+        $this->refreshTokenGenerator = $refreshTokenGenerator;
         $this->entityManager = $entityManager;
     }
 
     public function generateToken(UserInterface $user)
     {
-        $refreshToken = $this->refreshTokenManager->create();
-        $refreshToken->setUsername($user->getName());
-        $refreshToken->setRefreshToken(bin2hex(random_bytes(32)));
-        $refreshToken->setValid((new \DateTime())->modify('+1 month'));
+
+        $ttl = 30 * 24 * 60 * 60;
+        $refreshToken = $this->refreshTokenGenerator->createForUserWithTtl(
+            $user,
+            $ttl
+        );
+
         $this->entityManager->persist($refreshToken);
         $this->entityManager->flush();
-
-        $token = $refreshToken->getRefreshToken();
-        return $token;
+        return $refreshToken->getRefreshToken();
     }
-
-
-
 }

@@ -3,8 +3,8 @@ parameters:
     jwt_public_key: '%kernel.project_dir%/config/jwt/public.pem'
 
 services:
-    App\DataFixtures\CreateTokens\CreateAccToken:
-        public: true
+#    App\DataFixtures\CreateTokens\CreateAccToken:
+#        public: true
     _defaults:
         autowire: true
         autoconfigure: true

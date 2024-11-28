@@ -13,7 +13,7 @@ class GetMessagesControllerTest extends WebTestCase
     public function testBadResponse()
     {
         $client = $this->createAnonymousApiClient();
-        $client->request('POST', '/api/getMessages');
+        $client->request('GET', '/api/getMessages');
 
         $response = $client->getResponse();
         $this->assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
@@ -24,7 +24,7 @@ class GetMessagesControllerTest extends WebTestCase
     public function testGetMessagesResponse()
     {
         $client  = $this->createAuthenticatedApiClient();
-        $client->request('POST', '/api/getMessages');
+        $client->request('GET', '/api/getMessages');
 
         $response = $client->getResponse();
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());

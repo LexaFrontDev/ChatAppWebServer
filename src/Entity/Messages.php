@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Messages
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: "SEQUENCE")]
     #[ORM\Column(name: "id_message", type: Types::INTEGER)]
     private ?int $id = null;
 

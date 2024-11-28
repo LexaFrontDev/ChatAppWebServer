@@ -32,7 +32,7 @@ SendMessage:
 GetMessages:
     path: /api/getMessages
     controller: App\Controller\GetMessages::get
-    methods: POST
+    methods: GET
 
 ChangeName:
     path: /api/change/name

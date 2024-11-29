@@ -40,19 +40,21 @@ class ResetPasswordController extends AbstractController
         $code = $data['code'] ?? '';
         $newPassword = $data['newPassword'] ?? '';
 
-        $isVerifiedMail = $this->veryfiMail->veryfi($email, $code);
+        try{
+            $isVerifiedMail = $this->veryfiMail->veryfi($email, $code);
 
-        if ($isVerifiedMail) {
-            $setPassword = $this->updatePassword->updatePass($email, $newPassword);
-            if ($setPassword) {
-                return new JsonResponse('Пароль успешно изменён', 201);
+            if ($isVerifiedMail) {
+                $setPassword = $this->updatePassword->updatePass($email, $newPassword);
+
+                if ($setPassword) {
+                    return new JsonResponse('Пароль успешно изменён', 201);
+                }
+            } else {
+                return new JsonResponse('Пользователь с такой почтой не существует', 404);
             }
-        } else {
-            return new JsonResponse('Пользователь с такой почтой не существует', 404);
+        }catch (\InvalidArgumentException $e){
+            return new JsonResponse(['error' => $e->getMessage()], 400);
         }
-
-
-        return new JsonResponse('Не удалось обработать запрос', 400);
     }
 
 }

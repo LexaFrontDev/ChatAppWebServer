@@ -33,8 +33,8 @@ class ResetPasswordSendController extends AbstractController
         $email = $date['email'] ?? '';
         $isUser = $this->userRepo->findOneByEmail($email);
 
-        if(!$isUser){
-            new JsonResponse('Пользователь с таким почтой не существуеть', 404);
+        if (!$isUser) {
+            return new JsonResponse('Пользователь с такой почтой не существует', 404);
         }
 
         $sendCode = $this->sendCode->send($email);

@@ -27,13 +27,11 @@ class WebTestCase extends BaseWebTestCase
         ]);
     }
 
+
+
     public function createAuthenticatedApiClient(string $user = "test1@gmail.com"): KernelBrowser
     {
-        $passwordHasher = static::getContainer()->get(UserPasswordHasherInterface::class);
-        $encrypt = static ::getContainer()->get(EncryptionService::class);
-        $entityManager = static::getContainer()->get(EntityManagerInterface::class);
-        $fixtures =  new AppFixtures($passwordHasher, $encrypt);
-        $fixtures->load($entityManager);
+        $createUsers = $this->createUsersForTest();
 
         $user = static::getContainer()->get(UsersRepository::class)->findOneByEmail($user);
 
@@ -50,6 +48,15 @@ class WebTestCase extends BaseWebTestCase
             'Accept' => 'application/json',
             'HTTP_authorization' => 'Bearer ' . $accToken,
         ]);
+    }
+
+    public function createUsersForTest()
+    {
+        $passwordHasher = static::getContainer()->get(UserPasswordHasherInterface::class);
+        $encrypt = static ::getContainer()->get(EncryptionService::class);
+        $entityManager = static::getContainer()->get(EntityManagerInterface::class);
+        $fixtures =  new AppFixtures($passwordHasher, $encrypt);
+        $fixtures->load($entityManager);
     }
 
 }

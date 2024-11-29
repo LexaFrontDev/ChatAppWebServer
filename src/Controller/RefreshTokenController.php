@@ -44,7 +44,7 @@ class RefreshTokenController extends AbstractController
             return new JsonResponse(['error' => 'Не нашли пользователя'], 404);
         }
 
-        $user = $this->entityManager->getRepository(Users::class)->findOneBy(['name' => $username]);
+        $user = $this->entityManager->getRepository(Users::class)->findOneBy(['email' => $username]);
         if (!$user) {
             return new JsonResponse(['error' => 'Пользователь не найден'], 404);
         }

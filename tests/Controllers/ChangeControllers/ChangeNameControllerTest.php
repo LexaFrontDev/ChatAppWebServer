@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Tests\Controller\Change;
+namespace App\Tests\Controllers\ChangeControllers;
 
 use App\Tests\TestCase\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -9,6 +9,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ChangeNameControllerTest extends WebTestCase
 {
+    public function testBadResponse()
+    {
+        $client  = $this->createAuthenticatedApiClient();
+        $client->request('POST', '/api/change/name');
+        $response = $client->getResponse();
+        $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $data = json_decode($response->getContent(), true);
+    }
 
     public function testResponseChangeName()
     {
@@ -18,7 +26,6 @@ class ChangeNameControllerTest extends WebTestCase
         $response = $client->getResponse();
         $this->assertSame(Response::HTTP_CREATED, $response->getStatusCode());
         $data = json_decode($response->getContent(), true);
-        var_dump($data);
     }
 
 }

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Tests\Controller\Registration;
+namespace App\Tests\Controllers\RegistrationControllers;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;

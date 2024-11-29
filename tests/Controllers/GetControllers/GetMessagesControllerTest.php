@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Tests\Controller;
+namespace App\Tests\Controllers\GetController;
 
 use App\Tests\TestCase\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;

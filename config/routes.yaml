@@ -58,3 +58,15 @@ ResetPasswordResert:
     path: /api/reset/password/reset
     controller: App\Controller\ResetPasswordController\ResetPasswordController::reset
     methods: POST
+
+Api_logout:
+    path: /api/logout
+    controller: App\Controller\Logout\LogoutController::logout
+    methods: GET
+
+
+CreateGroup:
+    path: /api/create/group
+    controller: App\Controller\Create\createGroupController::createGroup
+    methods: POST
+

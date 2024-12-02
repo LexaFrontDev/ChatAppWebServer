@@ -37,7 +37,6 @@ class GetMessagesService
         $sentMess = $result['sentMessages'];
         $accToken = $this->accToken->createToken($receiver);
 
-
         if(empty($receivedMess) && !empty($sentMess)){
             return ['acc' => $accToken, 'date' => $result['sentMessages']];
         }

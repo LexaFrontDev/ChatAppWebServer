@@ -20,10 +20,13 @@ security:
                 success_handler: App\Security\LoginSuccec
                 failure_handler: Lexik\Bundle\JWTAuthenticationBundle\Security\Http\Authentication\AuthenticationFailureHandler
 
+
         api:
             pattern: ^/api/
             stateless: true
             provider: entity_provider
+            logout:
+                path: /api/logout
             jwt: ~
 
         refresh:
@@ -38,6 +41,8 @@ security:
         - { path: ^/api/change/messages, roles: ROLE_USER}
         - { path: ^/api/delete/message, roles: ROLE_USER}
         - { path: ^/api/reset/password/reset, roles: ROLE_SENT}
+        - { path: ^/api/logout, roles: ROLE_USER }
+        - { path: ^/api/create/group, roles: ROLE_USER }
 
 when@test:
     security:

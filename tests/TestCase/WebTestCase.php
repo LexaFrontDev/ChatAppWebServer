@@ -57,6 +57,8 @@ class WebTestCase extends BaseWebTestCase
         $entityManager = static::getContainer()->get(EntityManagerInterface::class);
         $fixtures =  new AppFixtures($passwordHasher, $encrypt);
         $fixtures->load($entityManager);
+        $user = static::getContainer()->get(UsersRepository::class)->findOneByEmail("test1@gmail.com");
+        $refToken = static::getContainer()->get(RefreshTokenService::class)->generateToken($user);
     }
 
 }

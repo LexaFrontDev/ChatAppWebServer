@@ -14,8 +14,9 @@ class RefreshTokenControllerTest extends WebTestCase
 
     public function testBadResponseRefresh()
     {
-        $client = $this->createAuthenticatedApiClient();
-        $client->request('POST', '/api/token/refresh', [], [], [], json_encode([
+        $client = $this->createClient();
+        $createUsers = $this->createUsersForTest();
+        $client->request('POST', '/api/token/refresh', [], [], ['Content-Type' => 'application/json'], json_encode([
             'refresh_token' => 'NOT'
         ]));
 
@@ -28,7 +29,8 @@ class RefreshTokenControllerTest extends WebTestCase
 
     public function testResponseRefreshController()
     {
-        $client = $this->createAuthenticatedApiClient();
+        $client = $this->createClient();
+        $createUsers = $this->createUsersForTest();
         $entityManager = static::getContainer()->get(EntityManagerInterface::class);
         $repository = $entityManager->getRepository(RefreshToken::class);
         $isRefresh  = $repository->findOneBy(['username' => 'test1@gmail.com']);

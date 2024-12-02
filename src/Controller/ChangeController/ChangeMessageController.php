@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Controller\Change;
+namespace App\Controller\ChangeController;
 
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

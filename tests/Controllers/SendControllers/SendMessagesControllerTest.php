@@ -27,9 +27,6 @@ class SendMessagesControllerTest extends WebTestCase
 
     public function testSendMessagesResponse()
     {
-
-
-
         $client  = $this->createAuthenticatedApiClient();
 
         $entityManager = static::getContainer()->get(EntityManagerInterface::class);

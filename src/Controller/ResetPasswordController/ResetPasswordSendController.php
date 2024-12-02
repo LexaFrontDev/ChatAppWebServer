@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Controller\Reset;
+namespace App\Controller\ResetPasswordController;
 
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Controller;
+namespace App\Controller\RefreshTokenControllers;
 
 use App\Entity\RefreshToken;
 use App\Entity\Users;

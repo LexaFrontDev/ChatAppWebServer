@@ -6,12 +6,12 @@ controllers:
 
 Register:
     path: /api/register
-    controller: App\Controller\Registeration\RegisterController::register
+    controller: App\Controller\RegistrationController\RegisterController::register
     methods: POST
 
 verifyEmail:
     path: /api/verifyEmail
-    controller: App\Controller\VerifyMailController::verify
+    controller: App\Controller\VerifyMailControllers\VerifyMailController::verify
     methods: POST
 
 Login:
@@ -26,35 +26,35 @@ gesdinet_jwt_refresh_token:
 
 SendMessage:
     path: /api/send/message
-    controller: App\Controller\SendMessage::sendMes
+    controller: App\Controller\SendMessagesControllers\SendMessage::sendMes
     methods: POST
 
 GetMessages:
     path: /api/getMessages
-    controller: App\Controller\GetMessages::get
+    controller: App\Controller\QueryControllers\GetMessages::get
     methods: GET
 
 ChangeName:
     path: /api/change/name
-    controller: App\Controller\Change\ChangeNameController::changeName
+    controller: App\Controller\ChangeController\ChangeNameController::changeName
     methods: POST
 
 ChangeMessages:
     path: /api/change/messages
-    controller: App\Controller\Change\ChangeMessageController::changeMess
+    controller: App\Controller\ChangeController\ChangeMessageController::changeMess
     methods: POST
 
 DeleteMessages:
     path: /api/delete/message
-    controller: App\Controller\Delete\DeleteMessagesController::deleteMess
+    controller: App\Controller\DeleteController\DeleteMessagesController::deleteMess
     methods: POST
 
 ResetPasswordSend:
     path: /api/reset/password/send
-    controller: App\Controller\Reset\ResetPasswordSendController::resetPassSend
+    controller: App\Controller\ResetPasswordController\ResetPasswordSendController::resetPassSend
     methods: POST
 
 ResetPasswordResert:
     path: /api/reset/password/reset
-    controller: App\Controller\Reset\ResetPasswordController::reset
+    controller: App\Controller\ResetPasswordController\ResetPasswordController::reset
     methods: POST

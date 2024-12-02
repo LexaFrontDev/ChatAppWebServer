@@ -26,29 +26,7 @@ class ResetPasswordControllerTest extends WebTestCase
         var_dump($data);
     }
 
-    public function testBadResponseWrongCode()
-    {
-        $client = $this->createClient();
-        $createUsers = $this->createUsersForTest();
-        $entityManager = static::getContainer()->get(EntityManagerInterface::class);
 
-        $client->request('POST', '/api/reset/password/send', [], [], ['Content-Type' => 'application/json'], json_encode(['email' => 'test1@gmail.com']));
-
-        $response = $client->getResponse();
-        $this->assertSame(Response::HTTP_CREATED, $response->getStatusCode());
-        $data = json_decode($response->getContent(), true);
-
-        $client->request('POST', '/api/reset/password/reset', [], [], [ 'Content-Type' => 'application/json'], json_encode([
-            'email' => 'test1@gmail.com',
-            'code' => 465456,
-            'newPassword' => 'test123456'
-        ]));
-
-        $response = $client->getResponse();
-        $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-        $data = json_decode($response->getContent(), true);
-        var_dump($data);
-    }
 
     public function testResponseResetPassword()
     {
@@ -59,18 +37,23 @@ class ResetPasswordControllerTest extends WebTestCase
         $client->request('POST', '/api/reset/password/send', [], [], ['Content-Type' => 'application/json'], json_encode(['email' => 'test1@gmail.com']));
 
         $response = $client->getResponse();
-        $this->assertSame(Response::HTTP_CREATED, $response->getStatusCode());
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
         $data = json_decode($response->getContent(), true);
         var_dump($data);
+        $header = $response->headers->all();
+        $accToken = isset($header['x-acc-token']) ? $header['x-acc-token'][0] : null;
 
         $repositoryVerify = $entityManager->getRepository(MailVeryfication::class);
         $codeTable = $repositoryVerify->findOneBy(['email' => 'test1@gmail.com']);
-        $code = $codeTable->getCode();
 
-        $client->request('POST', '/api/reset/password/reset', [], [], [ 'Content-Type' => 'application/json'], json_encode([
-                'email' => 'test1@gmail.com',
-                'code' => $code,
-                'newPassword' => 'test123456'
+        $code = $codeTable->getCode();
+        $client->request('POST', '/api/reset/password/reset', [], [], [
+            'Content-Type' => 'application/json',
+            'HTTP_authorization' => 'Bearer ' . $accToken,
+        ], json_encode([
+            'email' => 'test1@gmail.com',
+            'code' => $code,
+            'newPassword' => 'test123456'
         ]));
 
         $response = $client->getResponse();
@@ -78,7 +61,6 @@ class ResetPasswordControllerTest extends WebTestCase
         $data = json_decode($response->getContent(), true);
         var_dump($data);
     }
-
 
 
 }

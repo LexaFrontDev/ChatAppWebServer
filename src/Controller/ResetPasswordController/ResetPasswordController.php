@@ -33,6 +33,7 @@ class ResetPasswordController extends AbstractController
     }
 
     #[Route('/api/reset/password/reset', name: 'ResetPasswordResert', methods: ['POST'])]
+    #[Security("is_granted('ROLE_SENT')")]
     public function reset(Request $request)
     {
         $data = json_decode($request->getContent(), true);

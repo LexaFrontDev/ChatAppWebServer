@@ -20,7 +20,7 @@ class GetMessages extends AbstractController
         $this->getMessagesService = $getMessagesService;
     }
 
-    #[Route(path: '/api/getMessages', name: 'GetMessagesService', methods: ['GET'])]
+    #[Route(path: '/api/get/messages', name: 'GetMessagesService', methods: ['GET'])]
     public function get(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);

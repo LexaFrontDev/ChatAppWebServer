@@ -30,7 +30,7 @@ SendMessage:
     methods: POST
 
 GetMessages:
-    path: /api/getMessages
+    path: /api/get/messages
     controller: App\Controller\QueryControllers\GetMessages::get
     methods: GET
 

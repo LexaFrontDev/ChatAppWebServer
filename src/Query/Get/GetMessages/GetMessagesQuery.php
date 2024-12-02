@@ -27,29 +27,57 @@ class GetMessagesQuery
 
     public function getMessages($receiver)
     {
-        $messages = $this->entityManager->getRepository(Messages::class)
+        $messagesReceived = $this->entityManager->getRepository(Messages::class)
             ->findBy(['receiver' => $receiver]);
 
-        $result = [];
-        foreach ($messages as $message) {
-            $sender = $message->getSender();
-            $content = $message->getContent();
-            $iv = $message->getIv();
-            $messageU = $this->encryptService->decryptMessage($content, $iv);
+        $messagesSent = $this->entityManager->getRepository(Messages::class)
+            ->findBy(['sender' => $receiver]);
 
-            $result[] = [
-                'sender' => [
-                    'id' => $sender ? $sender->getId() : null,
-                    'email' => $sender ? $sender->getEmail() : null,
-                    'name' => $sender ? $sender->getName() : null,
-                ],
-                'id_message' => $message->getId(),
-                'message' => $messageU,
-                'timeSend' => $message->getCreatedAt()->format('Y-m-d H:i:s'),
-            ];
+        $result = [
+            'receivedMessages' => [],
+            'sentMessages' => [],
+        ];
+
+        foreach ($messagesReceived as $message) {
+            $result['receivedMessages'][] = $this->formatMessage($message, 'sender', 'receiver');
+        }
+
+        foreach ($messagesSent as $message) {
+            $result['sentMessages'][] = $this->formatMessage($message, 'receiver', 'sender');
         }
 
         return $result;
+    }
+
+    private function formatMessage($message, $counterPartyRole,  $selfRole)
+    {
+        $counterParty = $counterPartyRole === 'sender'
+            ? $message->getSender()
+            : $message->getReceiver();
+
+        $self = $selfRole === 'sender'
+            ? $message->getSender()
+            : $message->getReceiver();
+
+        $content = $message->getContent();
+        $iv = $message->getIv();
+        $decryptedMessage = $this->encryptService->decryptMessage($content, $iv);
+
+        return [
+            'id' => $message->getId(),
+            'message' => $decryptedMessage,
+            'timeSent' => $message->getCreatedAt()->format('Y-m-d H:i:s'),
+            $counterPartyRole => [
+                'id' => $counterParty ? $counterParty->getId() : null,
+                'email' => $counterParty ? $counterParty->getEmail() : null,
+                'name' => $counterParty ? $counterParty->getName() : null,
+            ],
+            $selfRole => [
+                'id' => $self ? $self->getId() : null,
+                'email' => $self ? $self->getEmail() : null,
+                'name' => $self ? $self->getName() : null,
+            ],
+        ];
     }
 
 }

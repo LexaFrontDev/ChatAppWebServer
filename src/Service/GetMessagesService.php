@@ -7,7 +7,7 @@ use App\Entity\Users;
 use App\Service\TokenService;
 use Symfony\Bundle\SecurityBundle\Security;
 use App\Query\Get\GetMessages\GetMessagesQuery;
-
+use function Symfony\Config\em;
 
 
 #[AsService]
@@ -31,14 +31,24 @@ class GetMessagesService
         if (!$receiver instanceof Users) {
             throw new \RuntimeException("Пользователь не аутентифицирован");
         }
+
         $result = $this->getMessagesQuery->getMessages($receiver);
-        if(empty($result)){
-            $accToken = $this->accToken->createToken($receiver);
-            $date = ['acc' => $accToken, 'date' => 'У пользователя нет активных чатов'];
-            return $date;
+        $receivedMess = $result['receivedMessages'];
+        $sentMess = $result['sentMessages'];
+        $accToken = $this->accToken->createToken($receiver);
+
+
+        if(empty($receivedMess) && !empty($sentMess)){
+            return ['acc' => $accToken, 'date' => $result['sentMessages']];
         }
-            $accToken = $this->accToken->createToken($receiver);
-            $date = ['acc' => $accToken, 'date' => $result];
-            return $date;
+        if(!empty($receivedMess) && empty($sentMess)){
+            return ['acc' => $accToken, 'date' => $result['receivedMessages']];
+        }
+
+        if(empty($receivedMess) || empty($sentMess)){
+            return ['acc' => $accToken, 'date' => 'У вас нет активных чатов'];
+        }
+
+        return ['acc' => $accToken, 'date' => $result];;
     }
 }

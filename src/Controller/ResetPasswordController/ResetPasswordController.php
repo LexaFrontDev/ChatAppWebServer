@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Service\VeryfiMailCode;
 use App\Repository\UsersRepository;
 use App\Command\Update\UpdatePassword\UpdatePasswordCommand;
-
+use App\Command\Update\UpdateRoles\UpdateRolesCommand;
 
 
 class ResetPasswordController extends AbstractController
@@ -19,21 +19,24 @@ class ResetPasswordController extends AbstractController
     private UpdatePasswordCommand $updatePassword;
     private UsersRepository $userRepository;
     private VeryfiMailCode $veryfiMail;
+    private UpdateRolesCommand $updateRole;
+
 
     public function __construct
     (
+        UpdateRolesCommand $updateRole,
         UpdatePasswordCommand $updatePassword,
         UsersRepository $userRepository,
         VeryfiMailCode $veryfiMail
     )
     {
+        $this->updateRole = $updateRole;
         $this->updatePassword = $updatePassword;
         $this->userRepository = $userRepository;
         $this->veryfiMail = $veryfiMail;
     }
 
     #[Route('/api/reset/password/reset', name: 'ResetPasswordResert', methods: ['POST'])]
-    #[Security("is_granted('ROLE_SENT')")]
     public function reset(Request $request)
     {
         $data = json_decode($request->getContent(), true);
@@ -48,6 +51,7 @@ class ResetPasswordController extends AbstractController
                 $setPassword = $this->updatePassword->updatePass($email, $newPassword);
 
                 if ($setPassword) {
+                    $this->updateRole->updateRoles($setPassword, ['ROLE_USER']);
                     return new JsonResponse('Пароль успешно изменён', 201);
                 }
             } else {

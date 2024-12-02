@@ -37,6 +37,7 @@ security:
         - { path: ^/api/change/name, roles: ROLE_USER }
         - { path: ^/api/change/messages, roles: ROLE_USER}
         - { path: ^/api/delete/message, roles: ROLE_USER}
+        - { path: ^/api/reset/password/reset, roles: ROLE_SENT}
 
 when@test:
     security:

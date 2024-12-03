@@ -60,35 +60,12 @@ class AppFixtures extends Fixture
 
     private function createGroup(ObjectManager $manager, $name)
     {
-        $user = $manager->getRepository(Users::class)->findOneBy(['name' => $name]);
-
-        if (!$user) {
-            return false;
-        }
-
-//        $existingGroup = $manager->getRepository(GroupTable::class)->findOneBy(['nameGroup' => 'test1group']);
-//        if ($existingGroup) {
-//            return $existingGroup;
-//        }
 
         $createGroup = new GroupTable();
         $createGroup->setNameGroup('test1group');
         $createGroup->setDescription('testDescriptionGroup');
         $manager->persist($createGroup);
         $manager->flush();
-
-        $IsIdGroup = $manager->getRepository(GroupTable::class)->findOneBy(['nameGroup' => 'test1group']);
-
-        if ($IsIdGroup) {
-            $createCreator = new Subscribers();
-            $createCreator->setIdGroup($IsIdGroup->getIdGroup());
-            $createCreator->setIdUsers($user->getId());
-            $createCreator->setNameUsers($user->getName());
-            $createCreator->setRoles(['ROLE_CREATOR_GROUP']);
-            $manager->persist($createCreator);
-            $manager->flush();
-        }
-
         return $createGroup;
     }
 }

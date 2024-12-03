@@ -12,6 +12,16 @@ use Doctrine\ORM\EntityManagerInterface;
 class FollowGroupTestsController extends WebTestCase
 {
 
+    public function testBadResponseFollowGroup()
+    {
+        $client  = $this->createAuthenticatedApiClient();
+        $client->request('POST', '/api/follow', [], [], []);
+        $response = $client->getResponse();
+        $this->assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        $data = json_decode($response->getContent(), true);
+        var_dump($data);
+    }
+
     public function testResponseFollowGroup()
     {
         $client  = $this->createAuthenticatedApiClient();
@@ -21,10 +31,10 @@ class FollowGroupTestsController extends WebTestCase
         $group = $repository->findOneBy(['nameGroup' => 'test1group']);
         $groupId = $group->getIdGroup();
 
-        $client->request('POST', '/api/follow/' . $groupId, [], [], [], []);
+        $client->request('POST', '/api/follow' . $groupId, [], [], []);
 
         $response = $client->getResponse();
-        $this->assertSame(Response::HTTP_CREATED, $response->getStatusCode());
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
         $data = json_decode($response->getContent(), true);
         var_dump($data);
     }

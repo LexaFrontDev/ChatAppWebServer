@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Controller\VerifyMailControllers;
+namespace App\Controller\AuthController\VerifyMailControllers;
 
 
 

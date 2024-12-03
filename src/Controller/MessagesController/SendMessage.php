@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Controller\SendMessagesControllers;
+namespace App\Controller\MessagesController;
 
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

@@ -6,12 +6,12 @@ controllers:
 
 Register:
     path: /api/register
-    controller: App\Controller\RegistrationController\RegisterController::register
+    controller: App\Controller\AuthController\RegisterController::register
     methods: POST
 
 verifyEmail:
     path: /api/verifyEmail
-    controller: App\Controller\VerifyMailControllers\VerifyMailController::verify
+    controller: App\Controller\AuthController\VerifyMailControllers\VerifyMailController::verify
     methods: POST
 
 Login:
@@ -21,42 +21,42 @@ Login:
 
 gesdinet_jwt_refresh_token:
     path: /api/token/refresh
-    controller: App\Controller\RefreshTokenController::refresh
+    controller: App\Controller\AuthController\RefreshTokenControllers\RefreshTokenController::refresh
     methods: [POST]
 
 SendMessage:
     path: /api/send/message
-    controller: App\Controller\SendMessagesControllers\SendMessage::sendMes
+    controller: App\Controller\MessagesController\SendMessage::sendMes
     methods: POST
 
 GetMessages:
     path: /api/get/messages
-    controller: App\Controller\QueryControllers\GetMessages::get
+    controller: App\Controller\MessagesController\GetMessages::get
     methods: GET
 
 ChangeName:
     path: /api/change/name
-    controller: App\Controller\ChangeController\ChangeNameController::changeName
+    controller: App\Controller\AuthController\ChangeNameController::changeName
     methods: POST
 
 ChangeMessages:
     path: /api/change/messages
-    controller: App\Controller\ChangeController\ChangeMessageController::changeMess
+    controller: App\Controller\MessagesController\ChangeMessageController::changeMess
     methods: POST
 
 DeleteMessages:
     path: /api/delete/message
-    controller: App\Controller\DeleteController\DeleteMessagesController::deleteMess
+    controller: App\Controller\MessagesController\DeleteMessagesController::deleteMess
     methods: POST
 
 ResetPasswordSend:
     path: /api/reset/password/send
-    controller: App\Controller\ResetPasswordController\ResetPasswordSendController::resetPassSend
+    controller: App\Controller\AuthController\ResetPasswordController\ResetPasswordSendController::resetPassSend
     methods: POST
 
 ResetPasswordResert:
     path: /api/reset/password/reset
-    controller: App\Controller\ResetPasswordController\ResetPasswordController::reset
+    controller: App\Controller\AuthController\ResetPasswordController\ResetPasswordController::reset
     methods: POST
 
 Api_logout:
@@ -67,10 +67,10 @@ Api_logout:
 
 CreateGroup:
     path: /api/create/group
-    controller: App\Controller\Create\createGroupController::createGroup
+    controller: App\Controller\GroupController\createGroupController::createGroup
     methods: POST
 
 FollowGroup:
     path: /api/follow{id}
-    controller: App\Controller\Follow\FollowGroupController::follow
+    controller: App\Controller\GroupController\FollowGroupController::follow
     methods: POST

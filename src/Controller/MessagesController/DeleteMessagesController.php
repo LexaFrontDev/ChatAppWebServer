@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Controller\DeleteController;
+namespace App\Controller\MessagesController;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

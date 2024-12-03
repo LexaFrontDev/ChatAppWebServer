@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Controller\Follow;
+namespace App\Controller\GroupController;
 
 use App\Entity\Users;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

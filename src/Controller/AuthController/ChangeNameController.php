@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Controller\ChangeController;
+namespace App\Controller\AuthController;
 
 
 use Symfony\Component\HttpFoundation\Request;

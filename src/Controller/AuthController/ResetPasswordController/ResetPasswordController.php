@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Controller\ResetPasswordController;
+namespace App\Controller\AuthController\ResetPasswordController;
 
 
 

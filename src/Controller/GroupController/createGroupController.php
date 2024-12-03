@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Controller\Create;
+namespace App\Controller\GroupController;
 
 
 use App\Entity\Users;

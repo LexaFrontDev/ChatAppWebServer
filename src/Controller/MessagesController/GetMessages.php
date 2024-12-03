@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Controller\QueryControllers;
+namespace App\Controller\MessagesController;
 
 
 

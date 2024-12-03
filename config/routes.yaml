@@ -70,3 +70,7 @@ CreateGroup:
     controller: App\Controller\Create\createGroupController::createGroup
     methods: POST
 
+FollowGroup:
+    path: /api/follow{id}
+    controller: App\Controller\Follow\FollowGroupController::follow
+    methods: POST

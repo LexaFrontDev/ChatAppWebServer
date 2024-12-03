@@ -33,12 +33,14 @@ class createGroupController extends AbstractController
 
         $data = json_decode($request->getContent(), true);
         $groupName = $data['groupName'] ?? '';
+        $description = $data['description'] ?? '';
+
 
         $creator = $this->security->getUser();
         if (!$creator instanceof Users) {new JsonResponse("Пользователь не аутентифицирован", 400);}
 
         try{
-            $IsCreate = $this->createGroup->create($creator->getId(), $groupName);
+            $IsCreate = $this->createGroup->create($creator->getId(), $groupName, $description);
 
             if($IsCreate){
                 $accToken = $this->token->createToken($IsCreate);

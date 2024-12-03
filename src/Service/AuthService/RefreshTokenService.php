@@ -1,13 +1,12 @@
 <?php
 
 
-namespace App\Service;
+namespace App\Service\AuthService;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Gesdinet\JWTRefreshTokenBundle\Generator\RefreshTokenGeneratorInterface;
 use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Contracts\Service\Attribute\AsService;
 
 #[AsService]
 class RefreshTokenService

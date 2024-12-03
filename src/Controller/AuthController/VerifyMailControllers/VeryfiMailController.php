@@ -8,7 +8,7 @@ namespace App\Controller\AuthController\VerifyMailControllers;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Service\VeryfiMailCode;
+use App\Service\AuthService\VeryfiMailCode;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 

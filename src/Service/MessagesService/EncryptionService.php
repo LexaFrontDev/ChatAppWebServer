@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Service\EncryptMessages;
+namespace App\Service\MessagesService;
 
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 

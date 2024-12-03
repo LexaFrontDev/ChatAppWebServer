@@ -1,13 +1,13 @@
 <?php
 
 
-namespace App\Service\Change;
+namespace App\Service\AuthService;
 
 use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use App\Service\TokenService;
-use App\Service\RefreshTokenService;
+use App\Service\AuthService\TokenService;
+use App\Service\AuthService\RefreshTokenService;
 use App\Entity\RefreshToken;
 use App\Command\Delete\DeleteRefreshTokens\DeleteRefreshTokenCommand;
 

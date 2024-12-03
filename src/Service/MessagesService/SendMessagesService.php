@@ -1,21 +1,20 @@
 <?php
 
 
-namespace App\Service;
+namespace App\Service\MessagesService;
 
 use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use App\Command\Create\CreateMessages\CreateMessagesCommand;
-use App\Service\EncryptMessages\EncryptionService;
-
-
+use App\Service\MessagesService\EncryptionService;
+use App\Service\AuthService\TokenService;
 
 #[AsService]
 class SendMessagesService
 {
-    private $encryptionService;
+    private EncryptionService $encryptionService;
     private EntityManagerInterface $entityManager;
     private Security $security;
     private $messagesCommand;
@@ -50,7 +49,6 @@ class SendMessagesService
         }
 
         $encryptedData = $this->encryptionService->encryptMessage($content);
-
         $sendMessage = $this->messagesCommand->createMessages(
             $sender,
             $receiver,

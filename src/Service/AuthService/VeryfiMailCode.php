@@ -1,13 +1,13 @@
 <?php
 
 
-namespace App\Service;
+namespace App\Service\AuthService;
 
 use App\Entity\MailVeryfication;
 use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Service\TokenService;
-use App\Service\RefreshTokenService;
+use App\Service\AuthService\TokenService;
+use App\Service\AuthService\RefreshTokenService;
 
 #[AsService]
 class VeryfiMailCode

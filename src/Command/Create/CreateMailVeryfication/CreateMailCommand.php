@@ -31,4 +31,11 @@ class CreateMailCommand
     }
 
 
+    public function existingSetMail($existing, $email, $code){
+        $existing->setEmail($email);
+        $existing->setCode($code);
+        $existing->setCreatedAt(new \DateTime());
+        $this->entityManager->persist($existing);
+    }
+
 }

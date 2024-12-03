@@ -5,7 +5,7 @@ namespace App\Command\Update\UpdateMessages;
 
 use App\Entity\Messages;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Service\EncryptMessages\EncryptionService;
+use App\Service\MessagesService\EncryptionService;
 
 
 class UpdateMessages

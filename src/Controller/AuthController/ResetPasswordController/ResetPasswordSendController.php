@@ -8,8 +8,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\UsersRepository;
-use App\Service\SendCode;
-use App\Service\TokenService;
+use App\Service\AuthService\SendCode;
+use App\Service\AuthService\TokenService;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Command\Update\UpdateRoles\UpdateRolesCommand;
 

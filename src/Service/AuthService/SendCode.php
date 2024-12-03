@@ -4,7 +4,7 @@
 
 
 
-namespace App\Service;
+namespace App\Service\AuthService;
 
     use Doctrine\ORM\EntityManagerInterface;
     use App\Entity\MailVeryfication;
@@ -39,10 +39,7 @@ namespace App\Service;
             $existing = $this->mailRepository->isMailUnique($email);
 
             if ($existing) {
-                $existing->setEmail($email);
-                $existing->setCode($code);
-                $existing->setCreatedAt(new \DateTime());
-                $this->entityManager->persist($existing);
+               $this->createMailCommand->existingSetMail($existing, $email, $code);
             } else {
                 $this->createMailCommand->createMail($email, $code);
             }

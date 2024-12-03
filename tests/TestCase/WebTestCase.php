@@ -13,8 +13,8 @@ use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Service\EncryptMessages\EncryptionService;
-use App\Service\RefreshTokenService;
+use App\Service\MessagesService\EncryptionService;
+use App\Service\AuthService\RefreshTokenService;
 
 
 class WebTestCase extends BaseWebTestCase

@@ -12,9 +12,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use App\Service\SendCode;
-use App\Service\TokenService;
-use App\Service\RefreshTokenService;
+use App\Service\AuthService\SendCode;
+use App\Service\AuthService\TokenService;
+use App\Service\AuthService\RefreshTokenService;
 use Symfony\Component\Form\FormFactoryInterface;
 
 

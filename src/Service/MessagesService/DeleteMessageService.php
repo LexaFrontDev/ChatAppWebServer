@@ -1,31 +1,35 @@
 <?php
 
 
-namespace App\Service\Delete;
+namespace App\Service\MessagesService;
 
 use App\Entity\Messages;
 use App\Entity\Users;
 use Symfony\Bundle\SecurityBundle\Security;
 use App\Command\Delete\DeleteMessages\DeleteMessageCommand;
-use App\Service\TokenService;
+use App\Service\AuthService\TokenService;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Validation\MessagesValidate\DeleteMessagesValidator;
 
 #[AsService]
 class DeleteMessageService
 {
     private TokenService $tokenService;
     private DeleteMessageCommand $delete;
+    private DeleteMessagesValidator $validator;
     private Security $security;
     private EntityManagerInterface $entityManager;
 
     public function __construct
     (
+        DeleteMessagesValidator $validator,
         TokenService $tokenService,
         DeleteMessageCommand $delete,
         Security $security,
-         EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager
     )
     {
+        $this->validator = $validator;
         $this->entityManager = $entityManager;
         $this->tokenService = $tokenService;
         $this->delete = $delete;
@@ -41,15 +45,8 @@ class DeleteMessageService
         }
 
         $message = $this->entityManager->getRepository(Messages::class)->find($messagesId);
-        if (!$message) {
-            throw new NotFoundHttpException("Сообщение не найдено");
-        }
-        if ($message->getSender()->getId() !== $user->getId()) {
-            throw new \RuntimeException("У вас нет прав для удаление этого сообщения");
-        }
-
+        $isValidate = $this->validator->validate($user, $message);
         $IsDelete = $this->delete->deleteMessages($messagesId);
-
 
         if($IsDelete){
             $accToken = $this->tokenService->createToken($user);

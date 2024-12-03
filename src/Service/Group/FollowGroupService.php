@@ -14,7 +14,8 @@ use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use App\Command\Follow\FollowGroupCommand;
-use App\Service\TokenService;
+use App\Service\AuthService\TokenService;
+use App\Validation\GroupValidation\FollowGroupValidator;
 
 #[AsService]
 class FollowGroupService
@@ -22,9 +23,11 @@ class FollowGroupService
     private $entityManager;
     private $followCommand;
     private $tokenService;
+    private $validator;
 
-    public function __construct(TokenService $tokenService, FollowGroupCommand $followCommand, EntityManagerInterface $entityManager)
+    public function __construct(FollowGroupValidator $validator,TokenService $tokenService, FollowGroupCommand $followCommand, EntityManagerInterface $entityManager)
     {
+        $this->validator = $validator;
         $this->tokenService = $tokenService;
         $this->followCommand = $followCommand;
         $this->entityManager = $entityManager;
@@ -32,12 +35,13 @@ class FollowGroupService
 
 
     public function followGroup(UserInterface $user, $id){
-        $group = $this->entityManager->getRepository(GroupTable::class)->findOneBy(['id_group' => $id]);
-        if (!$group) {throw new \Exception("Group not found");}
-        $users = $this->entityManager->getRepository(Users::class)->findOneBy(['id' => $user->getId()]);
-        if(!$user){throw new \Exception("Users not found");}
-        $isSubscriber = $this->entityManager->getRepository(Subscribers::class)->findOneBy(['id_users' => $users->getId()]);
-        if($isSubscriber){throw new \Exception("Users already subscribe");}
+
+        $isValidate = $this->validator->validate($user, $id);
+
+        $users = $isValidate['users'];
+        $group = $isValidate['group'];
+
+
         $isFollowUser = $this->followCommand->followGroup($users, $group->getIdGroup());
 
         if($isFollowUser){

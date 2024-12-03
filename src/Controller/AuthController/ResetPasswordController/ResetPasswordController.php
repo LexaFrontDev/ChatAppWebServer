@@ -8,7 +8,7 @@ namespace App\Controller\AuthController\ResetPasswordController;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use App\Service\VeryfiMailCode;
+use App\Service\AuthService\VeryfiMailCode;
 use App\Repository\UsersRepository;
 use App\Command\Update\UpdatePassword\UpdatePasswordCommand;
 use App\Command\Update\UpdateRoles\UpdateRolesCommand;

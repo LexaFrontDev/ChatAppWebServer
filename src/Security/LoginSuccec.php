@@ -8,9 +8,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use App\Repository\UsersRepository;
-use App\Service\SendCode;
-use App\Service\TokenService;
-use App\Service\RefreshTokenService;
+use App\Service\AuthService\SendCode;
+use App\Service\AuthService\TokenService;
+use App\Service\AuthService\RefreshTokenService;
 
 class LoginSuccec implements AuthenticationSuccessHandlerInterface
 {

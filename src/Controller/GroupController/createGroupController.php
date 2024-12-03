@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\SecurityBundle\Security;
 use App\Command\Create\CreateGroupCommand;
-use App\Service\TokenService;
+use App\Service\AuthService\TokenService;
 
 class createGroupController extends AbstractController
 {

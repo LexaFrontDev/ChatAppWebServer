@@ -1,21 +1,22 @@
 <?php
 
 
-namespace App\Service\Change;
+namespace App\Service\MessagesService;
 
 
 use App\Entity\Messages;
 use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use App\Service\TokenService;
+use App\Service\AuthService\TokenService;
 use App\Command\Update\UpdateMessages\UpdateMessages;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
+use App\Validation\MessagesValidate\ChangeMessagesValidator;
 
 #[AsService]
 class ChangeMessageService
 {
+    private ChangeMessagesValidator $messageValidator;
     private UpdateMessages $updateMessages;
     private TokenService $updateTokenService;
     private EntityManagerInterface $entityManager;
@@ -23,12 +24,14 @@ class ChangeMessageService
 
     public function __construct
     (
+        ChangeMessagesValidator $messageValidator,
         UpdateMessages $updateMessages,
         TokenService $updateTokenService,
         EntityManagerInterface $entityManager,
         Security $security
     )
     {
+        $this->messageValidator = $messageValidator;
         $this->updateMessages = $updateMessages;
         $this->updateTokenService = $updateTokenService;
         $this->entityManager = $entityManager;
@@ -39,21 +42,8 @@ class ChangeMessageService
     public function changeMessages($messagesId, $newMessages)
     {
         $user = $this->security->getUser();
-        if (!$user instanceof Users) {
-            throw new \RuntimeException("Пользователь не аутентифицирован");
-        }
-        if(!$newMessages){
-            throw new \RuntimeException("Сообщение не должен быть пустым");
-        }
-
         $message = $this->entityManager->getRepository(Messages::class)->find($messagesId);
-        if (!$message) {
-            throw new NotFoundHttpException("Сообщение не найдено");
-        }
-        if ($message->getSender()->getId() !== $user->getId()) {
-            throw new \RuntimeException("У вас нет прав для изменения этого сообщения");
-        }
-
+        $this->messageValidator->validate($user, $newMessages, $message);
 
         $isChange = $this->updateMessages->updateMess($messagesId, $newMessages);
 

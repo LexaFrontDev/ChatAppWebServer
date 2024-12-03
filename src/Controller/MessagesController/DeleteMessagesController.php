@@ -6,7 +6,7 @@ namespace App\Controller\MessagesController;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use App\Service\Delete\DeleteMessageService;
+use App\Service\MessagesService\DeleteMessageService;
 use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteMessagesController extends AbstractController

@@ -8,7 +8,7 @@ use App\Entity\Users;
 use App\Entity\Messages;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use App\Service\EncryptMessages\EncryptionService;
+use App\Service\MessagesService\EncryptionService;
 
 class GetMessagesQuery
 {

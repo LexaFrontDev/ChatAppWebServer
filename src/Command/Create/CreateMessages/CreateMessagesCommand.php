@@ -5,7 +5,7 @@ namespace App\Command\Create\CreateMessages;
 
 use App\Entity\Messages;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Service\TokenService;
+use App\Service\AuthService\TokenService;
 
 
 class CreateMessagesCommand

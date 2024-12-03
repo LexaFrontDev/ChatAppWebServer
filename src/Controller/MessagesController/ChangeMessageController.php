@@ -7,7 +7,7 @@ namespace App\Controller\MessagesController;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use App\Service\Change\ChangeMessageService;
+use App\Service\MessagesService\ChangeMessageService;
 
 class ChangeMessageController extends AbstractController
 {

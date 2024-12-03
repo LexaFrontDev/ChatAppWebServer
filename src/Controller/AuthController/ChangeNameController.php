@@ -7,7 +7,7 @@ namespace App\Controller\AuthController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Service\Change\ChangeNameService;
+use App\Service\AuthService\ChangeNameService;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
 
 class ChangeNameController extends AbstractController

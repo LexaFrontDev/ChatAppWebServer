@@ -4,7 +4,7 @@
 
 
 
-namespace App\Service;
+namespace App\Service\AuthService;
 
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;

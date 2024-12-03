@@ -12,7 +12,7 @@ use App\Entity\Subscribers;
 use App\Entity\Users;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use App\Service\EncryptMessages\EncryptionService;
+use App\Service\MessagesService\EncryptionService;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture

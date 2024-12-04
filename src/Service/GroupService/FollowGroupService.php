@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Service\Group;
+namespace App\Service\GroupService;
 
 
 

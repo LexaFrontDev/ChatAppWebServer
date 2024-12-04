@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Service\Group\FollowGroupService;
+use App\Service\GroupService\FollowGroupService;
 
 
 class FollowGroupController extends AbstractController

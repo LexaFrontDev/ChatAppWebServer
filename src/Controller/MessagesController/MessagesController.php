@@ -3,7 +3,6 @@
 
 namespace App\Controller\MessagesController;
 
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Service\MessagesService\SendMessagesService;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -33,73 +32,62 @@ class MessagesController extends AbstractController
         $this->sendMessage = $sendMessage;
     }
 
+    private function createJsonResponse($data, $status = 200, $headers = [])
+    {
+        $response = new JsonResponse($data, $status);
+        foreach ($headers as $key => $value) {
+            $response->headers->set($key, $value);
+        }
+        return $response;
+    }
 
     #[Route('/api/messages{id}', name: 'SendMessage', methods: ['POST'])]
-    public function sendMessages(int $id, Request $request){
+    public function sendMessages(int $id, Request $request)
+    {
         $data = json_decode($request->getContent(), true);
         $message = $data['content'] ?? '';
 
-        try{
+        try {
             $send = $this->sendMessage->sendMessages($id, $message);
-            $accToken = $send['acc'];
-            $message = $send['messages'];
-            $response = new JsonResponse($message, 201);
-            $response->headers->set('X-Acc-Token', $accToken);
-            return $response;
-        }catch (\Exception $e){
-            return new JsonResponse(['error' => 'Error: ' . $e->getMessage()], 400);
+            return $this->createJsonResponse($send['messages'], 201, ['X-Acc-Token' => $send['acc']]);
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(['error' => 'Error: ' . $e->getMessage()], 400);
         }
-
     }
 
     #[Route(path: '/api/messages', name: 'GetMessagesService', methods: ['GET'])]
-    public function getMessages(Request $request){
-        try{
+    public function getMessages(Request $request)
+    {
+        try {
             $get = $this->getMessagesService->getAllMessages();
-            $accToken = $get['acc'];
-            $date = $get['date'];
-            $response = new JsonResponse($get, 200);
-            $response->headers->set('X-Acc-Token', $accToken);
-            $response->setData(['data' => $date]);
-            return $response;
-        }catch (\InvalidArgumentException $e)
-        {
-            return new JsonResponse(['error' => 'Error: ' . $e->getMessage()], 400);
+            return $this->createJsonResponse(['data' => $get['date']], 200, ['X-Acc-Token' => $get['acc']]);
+        } catch (\InvalidArgumentException $e) {
+            return $this->createJsonResponse(['error' => 'Error: ' . $e->getMessage()], 400);
         }
     }
 
     #[Route('/api/messages{id}', name: 'DeleteMessages', methods: ['DELETE'])]
-    public function deleteMessages(int $id, Request $request){
-        try{
+    public function deleteMessages(int $id)
+    {
+        try {
             $isDelete = $this->deleteMessage->delete($id);
-            $accToken = $isDelete['acc'];
-            $message = $isDelete['message'];
-            $response = new JsonResponse($message, 201);
-            $response->headers->set('X-Acc-Token', $accToken);
-            return $response;
+            return $this->createJsonResponse($isDelete['message'], 201, ['X-Acc-Token' => $isDelete['acc']]);
         } catch (\Exception $e) {
-            return new JsonResponse(['error' => 'Error: ' . $e->getMessage()], 400);
+            return $this->createJsonResponse(['error' => 'Error: ' . $e->getMessage()], 400);
         }
     }
 
     #[Route('/api/messages{id}', name: 'ChangeMessages', methods: ['PUT'])]
-    public function changeMessages(int $id, Request $request){
-        $date = json_decode($request->getContent(), true);
-        $newMessages = $date['newMessage'] ?? '';
+    public function changeMessages(int $id, Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+        $newMessage = $data['newMessage'] ?? '';
 
-        try{
-            $result = $this->changeMessages->changeMessages($id, $newMessages);
-            $accToken = $result['acc'];
-            $message = $result['messages'];
-            $response = new JsonResponse($message, 201);
-            $response->headers->set('X-Acc-Token', $accToken);
-            return $response;
-        }catch (\Exception $e){
-            return new JsonResponse(['error' => 'Error: ' . $e->getMessage()], 400);
+        try {
+            $result = $this->changeMessages->changeMessages($id, $newMessage);
+            return $this->createJsonResponse($result['messages'], 201, ['X-Acc-Token' => $result['acc']]);
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(['error' => 'Error: ' . $e->getMessage()], 400);
         }
-
     }
-
-
-
 }

@@ -25,13 +25,13 @@ gesdinet_jwt_refresh_token:
     methods: [POST]
 
 SendMessage:
-    path: /api/send/message
-    controller: App\Controller\MessagesController\SendMessage::sendMes
+    path: /api/messages{id}
+    controller: App\Controller\MessagesController\MessagesController::sendMessages
     methods: POST
 
 GetMessages:
-    path: /api/get/messages
-    controller: App\Controller\MessagesController\GetMessages::get
+    path: /api/messages
+    controller: App\Controller\MessagesController\MessagesController::getMessages
     methods: GET
 
 ChangeName:
@@ -40,14 +40,14 @@ ChangeName:
     methods: POST
 
 ChangeMessages:
-    path: /api/change/messages
-    controller: App\Controller\MessagesController\ChangeMessageController::changeMess
-    methods: POST
+    path: /api/messages{id}
+    controller: App\Controller\MessagesController\MessagesController::changeMessages
+    methods: PUT
 
 DeleteMessages:
-    path: /api/delete/message
-    controller: App\Controller\MessagesController\DeleteMessagesController::deleteMess
-    methods: POST
+    path: /api/messages{id}
+    controller: App\Controller\MessagesController\MessagesController::deleteMessages
+    methods: DELETE
 
 ResetPasswordSend:
     path: /api/reset/password/send

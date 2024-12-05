@@ -27,7 +27,9 @@ class FollowGroupController extends AbstractController
     public function follow(int $id, Request $request)
     {
         $subscriber = $this->security->getUser();
-        if (!$subscriber instanceof Users) {new JsonResponse("Пользователь не аутентифицирован", 400);}
+        if (!$subscriber instanceof Users) {
+            new JsonResponse("Пользователь не аутентифицирован", 400);
+        }
 
 
         try{

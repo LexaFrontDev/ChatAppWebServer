@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Tests\Controllers\SendControllers;
+namespace App\Tests\Controllers\MessagesControllerTest;
 
 use App\Entity\Users;
 use App\Tests\TestCase\WebTestCase;
@@ -15,13 +15,12 @@ class SendMessagesControllerTest extends WebTestCase
     public function testBadResponse()
     {
         $client  = $this->createAuthenticatedApiClient();
-        $client->request('POST', '/api/send/message',[], [], [], json_encode([
-            'receiver_id' => '',
+        $client->request('POST', '/api/messages3',[], [], [], json_encode([
             'content' => ''
         ]));
 
         $response = $client->getResponse();
-        $this->assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         $data = json_decode($response->getContent(), true);
     }
 
@@ -34,8 +33,7 @@ class SendMessagesControllerTest extends WebTestCase
         $receiver = $repository->findOneBy(['name' => 'test2']);
         $receiverId = $receiver->getId();
 
-        $client->request('POST', '/api/send/message',[], [], [], json_encode([
-            'receiver_id' => $receiverId,
+        $client->request('POST', '/api/messages' . $receiverId,[], [], [], json_encode([
             'content' => 'с новым годом!'
         ]));
 

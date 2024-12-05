@@ -36,10 +36,8 @@ security:
 
     access_control:
         - { path: ^/api/veryfiEmail, roles: ROLE_USER }
-        - { path: ^/api/sendMessage, roles: ROLE_USER }
+        - { path: ^/api/messages/\d+, roles: ROLE_USER }
         - { path: ^/api/change/name, roles: ROLE_USER }
-        - { path: ^/api/change/messages, roles: ROLE_USER}
-        - { path: ^/api/delete/message, roles: ROLE_USER}
         - { path: ^/api/reset/password/reset, roles: ROLE_SENT}
         - { path: ^/api/logout, roles: ROLE_USER }
         - { path: ^/api/create/group, roles: ROLE_USER }

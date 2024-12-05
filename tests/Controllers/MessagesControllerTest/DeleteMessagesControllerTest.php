@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Tests\Controllers\DeleteControllers;
+namespace App\Tests\Controllers\MessagesControllerTest;
 
 use App\Entity\Messages;
 use App\Entity\Users;
@@ -16,10 +16,7 @@ class DeleteMessagesControllerTest extends WebTestCase
     {
         $client  = $this->createAuthenticatedApiClient();
 
-        $client->request('POST', '/api/delete/message',[], [], [], json_encode([
-            'messageID' => ''
-        ]));
-
+        $client->request('DELETE', '/api/messages2',[], [], []);
         $response = $client->getResponse();
         $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         $data = json_decode($response->getContent(), true);
@@ -38,9 +35,7 @@ class DeleteMessagesControllerTest extends WebTestCase
         $messages = $repositoryMessages->findOneBy(['sender' => $senderId]);
         $messagesId = $messages->getId();
 
-        $client->request('POST', '/api/delete/message',[], [], [], json_encode([
-            'messageID' => $messagesId,
-        ]));
+        $client->request('DELETE', '/api/messages' . $messagesId,[], [], []);
 
         $response = $client->getResponse();
         $this->assertSame(Response::HTTP_CREATED, $response->getStatusCode());

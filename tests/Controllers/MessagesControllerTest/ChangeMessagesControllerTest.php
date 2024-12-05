@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Tests\Controllers\ChangeControllers;
+namespace App\Tests\Controllers\MessagesControllerTest;
 
 
 use App\Entity\Messages;
@@ -17,8 +17,7 @@ class ChangeMessagesControllerTest extends WebTestCase
     public function testBadResponse()
     {
         $client  = $this->createAuthenticatedApiClient();
-        $client->request('POST', '/api/change/messages',[], [], [], json_encode([
-            'messageID' => '1',
+        $client->request('PUT', '/api/messages1',[], [], [], json_encode([
             'newMessage' => 'Новый год еще не наступил:('
         ]));
 
@@ -40,8 +39,7 @@ class ChangeMessagesControllerTest extends WebTestCase
         $messages = $repositoryMessages->findOneBy(['sender' => $senderId]);
         $messagesId = $messages->getId();
 
-        $client->request('POST', '/api/change/messages',[], [], [], json_encode([
-            'messageID' => $messagesId,
+        $client->request('PUT', '/api/messages' . $messagesId,[], [], [], json_encode([
             'newMessage' => 'Новый год еще не наступил:('
             ]));
 

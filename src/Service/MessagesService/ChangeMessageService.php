@@ -42,6 +42,11 @@ class ChangeMessageService
     public function changeMessages($messagesId, $newMessages)
     {
         $user = $this->security->getUser();
+
+        if (!$user instanceof Users) {
+            throw new \RuntimeException("Пользователь не аутентифицирован");
+        }
+
         $message = $this->entityManager->getRepository(Messages::class)->find($messagesId);
         $this->messageValidator->validate($user, $newMessages, $message);
 

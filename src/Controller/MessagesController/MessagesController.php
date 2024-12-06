@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Service\MessagesService\GetMessagesService;
 use App\Service\MessagesService\DeleteMessageService;
 use App\Service\MessagesService\ChangeMessageService;
+use App\Service\JsonResponseService\CreateJsonResponseService;
 
 class MessagesController extends AbstractController
 {
@@ -17,29 +18,25 @@ class MessagesController extends AbstractController
     private $sendMessage;
     private $deleteMessage;
     private  $changeMessages;
+    private $createJsonService;
 
     public function __construct
     (
+        CreateJsonResponseService $createJsonService,
         ChangeMessageService $changeMessages,
         GetMessagesService $getMessagesService,
         SendMessagesService $sendMessage,
         DeleteMessageService $deleteMessage
     )
     {
+        $this->createJsonService = $createJsonService;
         $this->changeMessages = $changeMessages;
         $this->deleteMessage = $deleteMessage;
         $this->getMessagesService = $getMessagesService;
         $this->sendMessage = $sendMessage;
     }
 
-    private function createJsonResponse($data, $status = 200, $headers = [])
-    {
-        $response = new JsonResponse($data, $status);
-        foreach ($headers as $key => $value) {
-            $response->headers->set($key, $value);
-        }
-        return $response;
-    }
+
 
     #[Route('/api/messages{id}', name: 'SendMessage', methods: ['POST'])]
     public function sendMessages(int $id, Request $request)
@@ -49,9 +46,9 @@ class MessagesController extends AbstractController
 
         try {
             $send = $this->sendMessage->sendMessages($id, $message);
-            return $this->createJsonResponse($send['messages'], 201, ['X-Acc-Token' => $send['acc']]);
+            return $this->createJsonService->createJson($send['messages'], 201, ['X-Acc-Token' => $send['acc']]);
         } catch (\Exception $e) {
-            return $this->createJsonResponse(['error' => 'Error: ' . $e->getMessage()], 400);
+            return $this->createJsonService->createJson(['error' => 'Error: ' . $e->getMessage()], 400);
         }
     }
 
@@ -60,9 +57,9 @@ class MessagesController extends AbstractController
     {
         try {
             $get = $this->getMessagesService->getAllMessages();
-            return $this->createJsonResponse(['data' => $get['date']], 200, ['X-Acc-Token' => $get['acc']]);
+            return $this->createJsonService->createJson(['data' => $get['date']], 200, ['X-Acc-Token' => $get['acc']]);
         } catch (\InvalidArgumentException $e) {
-            return $this->createJsonResponse(['error' => 'Error: ' . $e->getMessage()], 400);
+            return $this->createJsonService->createJson(['error' => 'Error: ' . $e->getMessage()], 400);
         }
     }
 
@@ -71,9 +68,9 @@ class MessagesController extends AbstractController
     {
         try {
             $isDelete = $this->deleteMessage->delete($id);
-            return $this->createJsonResponse($isDelete['message'], 201, ['X-Acc-Token' => $isDelete['acc']]);
+            return $this->createJsonService->createJson($isDelete['message'], 201, ['X-Acc-Token' => $isDelete['acc']]);
         } catch (\Exception $e) {
-            return $this->createJsonResponse(['error' => 'Error: ' . $e->getMessage()], 400);
+            return $this->createJsonService->createJson(['error' => 'Error: ' . $e->getMessage()], 400);
         }
     }
 
@@ -85,9 +82,9 @@ class MessagesController extends AbstractController
 
         try {
             $result = $this->changeMessages->changeMessages($id, $newMessage);
-            return $this->createJsonResponse($result['messages'], 201, ['X-Acc-Token' => $result['acc']]);
+            return $this->createJsonService->createJson($result['messages'], 201, ['X-Acc-Token' => $result['acc']]);
         } catch (\Exception $e) {
-            return $this->createJsonResponse(['error' => 'Error: ' . $e->getMessage()], 400);
+            return $this->createJsonService->createJson(['error' => 'Error: ' . $e->getMessage()], 400);
         }
     }
 }

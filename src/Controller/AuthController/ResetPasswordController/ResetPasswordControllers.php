@@ -13,7 +13,7 @@ use App\Command\Update\UpdateRoles\UpdateRolesCommand;
 use App\Service\AuthService\SendCode;
 use App\Service\AuthService\VeryfiMailCode;
 use App\Command\Update\UpdatePassword\UpdatePasswordCommand;
-
+use App\Service\JsonResponseService\CreateJsonResponseService;
 
 class ResetPasswordControllers extends AbstractController
 {
@@ -23,10 +23,11 @@ class ResetPasswordControllers extends AbstractController
     private  $sendCode;
     private  $veryfiMail;
     private  $updatePassword;
-
+    private  $createJsonService;
 
     public function __construct
     (
+        CreateJsonResponseService $createJsonService,
         UpdatePasswordCommand $updatePassword,
         VeryfiMailCode $veryfiMail,
         SendCode $sendCode,
@@ -35,6 +36,7 @@ class ResetPasswordControllers extends AbstractController
         UsersRepository $userRepository
     )
     {
+        $this->createJsonService = $createJsonService;
         $this->updatePassword = $updatePassword;
         $this->veryfiMail = $veryfiMail;
         $this->sendCode = $sendCode;
@@ -43,14 +45,7 @@ class ResetPasswordControllers extends AbstractController
         $this->userRepository = $userRepository;
     }
 
-    private function createJsonResponse($data, $status = 200, $headers = [])
-    {
-        $response = new JsonResponse($data, $status);
-        foreach ($headers as $key => $value) {
-            $response->headers->set($key, $value);
-        }
-        return $response;
-    }
+
 
     #[Route('/api/reset/password/send', name: 'ResetPasswordSend', methods: ['POST'])]
     public function resetPasswordSendCodeFun(Request $request){
@@ -65,7 +60,7 @@ class ResetPasswordControllers extends AbstractController
         $sendCode = $this->sendCode->send($email);
         if($sendCode){
             $accToken = $this->tokenService->createToken($isUser);
-            return $this->createJsonResponse(['Код отправлен в почту пожалуйста подтвердите'], 200, ['X-Acc-Token' => $accToken]);
+            return $this->createJsonService->createJson(['Код отправлен в почту пожалуйста подтвердите'], 200, ['X-Acc-Token' => $accToken]);
         }
 
         return new JsonResponse('Не получилось сбросить пароль', 400);
@@ -85,7 +80,7 @@ class ResetPasswordControllers extends AbstractController
 
             if($isVerifiedMail){
                 $setPassword = $this->updatePassword->updatePass($email, $newPassword);
-                return $this->createJsonResponse(['Пароль успешно изменён'], 201, ['X-Acc-Token' => $isVerifiedMail['acc']]);
+                return $this->createJsonService->createJson(['Пароль успешно изменён'], 201, ['X-Acc-Token' => $isVerifiedMail['acc']]);
             }
 
             return new JsonResponse('Не получилось сбросить пароль', 400);

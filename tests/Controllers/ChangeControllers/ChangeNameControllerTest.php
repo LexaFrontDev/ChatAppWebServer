@@ -12,7 +12,8 @@ class ChangeNameControllerTest extends WebTestCase
     public function testBadResponse()
     {
         $client  = $this->createAuthenticatedApiClient();
-        $client->request('POST', '/api/change/name');
+        $client->request('PUT', '/api/name');
+
         $response = $client->getResponse();
         $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         $data = json_decode($response->getContent(), true);
@@ -21,7 +22,7 @@ class ChangeNameControllerTest extends WebTestCase
     public function testResponseChangeName()
     {
         $client  = $this->createAuthenticatedApiClient();
-        $client->request('POST', '/api/change/name',[], [], [], json_encode(['newName' => 'testChangeName',]));
+        $client->request('PUT', '/api/name',[], [], [], json_encode(['newName' => 'testChangeName',]));
 
         $response = $client->getResponse();
         $this->assertSame(Response::HTTP_CREATED, $response->getStatusCode());

@@ -35,9 +35,9 @@ GetMessages:
     methods: GET
 
 ChangeName:
-    path: /api/change/name
+    path: /api/name
     controller: App\Controller\AuthController\ChangeNameController::changeName
-    methods: POST
+    methods: PUT
 
 ChangeMessages:
     path: /api/messages{id}
@@ -51,12 +51,12 @@ DeleteMessages:
 
 ResetPasswordSend:
     path: /api/reset/password/send
-    controller: App\Controller\AuthController\ResetPasswordController\ResetPasswordSendController::resetPassSend
+    controller: App\Controller\AuthController\ResetPasswordController\ResetPasswordControllers::resetPasswordSendCodeFun
     methods: POST
 
 ResetPasswordResert:
-    path: /api/reset/password/reset
-    controller: App\Controller\AuthController\ResetPasswordController\ResetPasswordController::reset
+    path: /api/reset/password
+    controller: App\Controller\AuthController\ResetPasswordController\ResetPasswordControllers::resetPasswordCheckCodeFunction
     methods: POST
 
 Api_logout:

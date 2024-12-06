@@ -47,7 +47,7 @@ class ResetPasswordControllerTest extends WebTestCase
         $codeTable = $repositoryVerify->findOneBy(['email' => 'test1@gmail.com']);
 
         $code = $codeTable->getCode();
-        $client->request('POST', '/api/reset/password/reset', [], [], [
+        $client->request('POST', '/api/reset/password', [], [], [
             'Content-Type' => 'application/json',
             'HTTP_authorization' => 'Bearer ' . $accToken,
         ], json_encode([

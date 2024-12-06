@@ -20,7 +20,7 @@ class ChangeNameController extends AbstractController
         $this->changeNameService = $changeNameService;
     }
 
-    #[Route('/api/change/name', name: 'ChangeName', methods: ['POST'])]
+    #[Route('/api/name', name: 'ChangeName', methods: ['PUT'])]
     public function changeName(Request $request)
     {
         $data = json_decode($request->getContent(), true);

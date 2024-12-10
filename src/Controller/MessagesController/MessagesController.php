@@ -38,14 +38,27 @@ class MessagesController extends AbstractController
 
 
 
-    #[Route('/api/messages{id}', name: 'SendMessage', methods: ['POST'])]
-    public function sendMessages(int $id, Request $request)
+    #[Route('/api/messages/users{id}', name: 'SendMessageUsers', methods: ['POST'])]
+    public function sendMessagesUsers(int $id, Request $request)
     {
         $data = json_decode($request->getContent(), true);
         $message = $data['content'] ?? '';
 
         try {
-            $send = $this->sendMessage->sendMessages($id, $message);
+            $send = $this->sendMessage->sendMessagesUsers($id, $message);
+            return $this->createJsonService->createJson($send['messages'], 201, ['X-Acc-Token' => $send['acc']]);
+        } catch (\Exception $e) {
+            return $this->createJsonService->createJson(['error' => 'Error: ' . $e->getMessage()], 400);
+        }
+    }
+
+    #[Route('/api/messages/group{id}', name: 'SendMessageGroup', methods: ['POST'])]
+    public function sendMessagesGroup($id, Request $request){
+        $data = json_decode($request->getContent(), true);
+        $message = $data['content'] ?? '';
+
+        try {
+            $send = $this->sendMessage->sendMessagesGroup($id, $message);
             return $this->createJsonService->createJson($send['messages'], 201, ['X-Acc-Token' => $send['acc']]);
         } catch (\Exception $e) {
             return $this->createJsonService->createJson(['error' => 'Error: ' . $e->getMessage()], 400);

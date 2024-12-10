@@ -24,9 +24,14 @@ gesdinet_jwt_refresh_token:
     controller: App\Controller\AuthController\RefreshTokenControllers\RefreshTokenController::refresh
     methods: [POST]
 
-SendMessage:
-    path: /api/messages{id}
-    controller: App\Controller\MessagesController\MessagesController::sendMessages
+SendMessageUsers:
+    path: /api/messages/users{id}
+    controller: App\Controller\MessagesController\MessagesController::sendMessagesUsers
+    methods: POST
+
+SendMessageGroup:
+    path: /api/messages/group{id}
+    controller: App\Controller\MessagesController\MessagesController::sendMessagesGroup
     methods: POST
 
 GetMessages:

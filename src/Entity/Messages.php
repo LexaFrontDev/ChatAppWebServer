@@ -10,22 +10,16 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: "Messages")]
-class Messages
+#[ORM\InheritanceType("SINGLE_TABLE")]
+#[ORM\DiscriminatorColumn(name: "type", type: "string")]
+#[ORM\DiscriminatorMap(["user" => MessagesUser::class, "group" => MessagesGroup::class])]
+#[ORM\Table(name: "messages")]
+abstract class Messages
 {
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: "SEQUENCE")]
     #[ORM\Column(name: "id_message", type: Types::INTEGER)]
     private ?int $id = null;
-
-    #[ORM\GeneratedValue(strategy: "SEQUENCE")]
-    #[ORM\Column(name: "sender_id", type: Types::INTEGER)]
-    private ?Users $sender = null;
-
-
-    #[ORM\GeneratedValue(strategy: "SEQUENCE")]
-    #[ORM\Column(name: "receiver_id", type: Types::INTEGER)]
-    private ?Users $receiver = null;
 
     #[ORM\Column(name: "content", type: Types::TEXT)]
     private ?string $content = null;
@@ -47,27 +41,7 @@ class Messages
         return $this->id;
     }
 
-    public function getSender(): ?Users
-    {
-        return $this->sender;
-    }
 
-    public function setSender(Users $sender): self
-    {
-        $this->sender = $sender;
-        return $this;
-    }
-
-    public function getReceiver(): ?Users
-    {
-        return $this->receiver;
-    }
-
-    public function setReceiver(Users $receiver): self
-    {
-        $this->receiver = $receiver;
-        return $this;
-    }
 
     public function getContent(): ?string
     {

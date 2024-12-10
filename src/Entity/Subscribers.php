@@ -11,24 +11,13 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use App\Repository\GroupTableRepository;
 
 #[ORM\Entity]
-#[ORM\Table(name: "Subscribers")]
-class Subscribers
+class Subscribers extends GroupTable
 {
-
-    #[ORM\Id]
     #[ORM\GeneratedValue(strategy: "SEQUENCE")]
-    #[ORM\Column(name: 'id', type: 'integer')]
-    private ?int $id = null;
-
-    #[ORM\GeneratedValue(strategy: "SEQUENCE")]
-    #[ORM\Column(name: 'idGroup', type: 'integer')]
-    private ?int $id_group = null;
-
-    #[ORM\GeneratedValue(strategy: "SEQUENCE")]
-    #[ORM\Column(name: 'idUsers', type: 'integer')]
+    #[ORM\Column(name: 'id_users', type: 'integer')]
     private ?int $id_users = null;
 
-    #[ORM\Column(name: 'groupName', type: 'string', length: 255, unique: true)]
+    #[ORM\Column(name: 'name_users', type: 'string', length: 255, unique: true)]
     private ?string $nameUsers = null;
 
     #[ORM\Column(name: 'roles', type: "json", nullable: false)]
@@ -42,11 +31,6 @@ class Subscribers
     }
 
 
-    public function getIdGroup()
-    {
-        return $this->id_group;
-    }
-
     public function getIdUsers()
     {
         return $this->id_users;
@@ -58,11 +42,6 @@ class Subscribers
         return $this->nameUsers;
     }
 
-
-    public function setIdGroup($id_group)
-    {
-        $this->id_group = $id_group;
-    }
 
 
     public function setIdUsers($id_users)

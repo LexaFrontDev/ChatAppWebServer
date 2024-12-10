@@ -12,8 +12,11 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use App\Repository\GroupTableRepository;
 
 #[ORM\Entity]
+#[ORM\InheritanceType("SINGLE_TABLE")]
+#[ORM\DiscriminatorColumn(name: "type", type: "string")]
+#[ORM\DiscriminatorMap(["subscriber" => Subscribers::class])]
 #[ORM\Table(name: "group_table")]
-class GroupTable
+abstract class GroupTable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: "SEQUENCE")]

@@ -84,7 +84,10 @@ class SendMessagesService
             throw new \InvalidArgumentException("Группа  не найдена");
         }
 
-        $checkSender = $group->getIdUsers();
+        $checkSender = $this->entityManager->getRepository(Subscribers::class)->findOneBy([
+            'id_group' => $groupId,
+            'id_users' => $sender->getId(),
+        ]);
 
         if(!$checkSender){
             throw new \InvalidArgumentException("Пользовател не подписан в группу");

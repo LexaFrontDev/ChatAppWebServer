@@ -42,7 +42,7 @@ class FollowGroupService
         $group = $isValidate['group'];
 
 
-        $isFollowUser = $this->followCommand->followGroup($users, $group->getIdGroup());
+        $isFollowUser = $this->followCommand->followGroup($users, $id);
 
         if($isFollowUser){
             $accToken = $this->tokenService->createToken($isFollowUser);

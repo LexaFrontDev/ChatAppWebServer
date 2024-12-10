@@ -21,8 +21,7 @@ class FollowGroupCommand
 
     public function followGroup(UserInterface $user, $id)
     {
-            $subscribe = new Subscribers();
-            $subscribe->setIdGroup($id);
+            $subscribe = $this->entityManager->getRepository(Subscribers::class)->findOneBy(['id_group' => $id]);
             $subscribe->setIdUsers($user->getId());
             $subscribe->setNameUsers($user->getName());
             $this->entityManager->persist($subscribe);

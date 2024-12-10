@@ -9,37 +9,35 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Service\GroupService\FollowGroupService;
+use App\Service\UsersService\GetUserInSecurityService;
+use App\Service\JsonResponseService\CreateJsonResponseService;
 
 
 class FollowGroupController extends AbstractController
 {
 
-    private FollowGroupService $followGroup;
-    private Security $security;
+    private  $followGroup;
+    private $getUserInService;
+    private $jsonResponseService;
 
-    public function __construct(FollowGroupService $followGroup,  Security $security)
+    public function __construct(CreateJsonResponseService $jsonResponseService,GetUserInSecurityService $getUserInService, FollowGroupService $followGroup)
     {
+        $this->jsonResponseService = $jsonResponseService;
         $this->followGroup = $followGroup;
-        $this->security = $security;
+        $this->getUserInService = $getUserInService;
     }
 
     #[Route('/api/follow/group{id}', name: 'FollowGroupCommand', methods: ['POST'])]
     public function follow(int $id, Request $request)
     {
-        $subscriber = $this->security->getUser();
-        if (!$subscriber instanceof Users) {
-            new JsonResponse("Пользователь не аутентифицирован", 400);
-        }
-
+        $subscriber = $this->getUserInService->getSender();
 
         try{
             $IsFollow = $this->followGroup->followGroup($subscriber, $id);
 
             if($IsFollow){
                 $accToken = $IsFollow['acc'];
-                $response = new JsonResponse($IsFollow, 200);
-                $response->headers->set('X-Acc-Token', $accToken);
-                return $response;
+                return $this->jsonResponseService->createJson($IsFollow, 200, ['X-Acc-Token', $accToken]);
             }
 
             return new JsonResponse('не удалось подписаться', 400);

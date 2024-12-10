@@ -22,9 +22,14 @@ class CreateGroupCommand
 
     public function create($userId, $nameGroup, $descriptionGroup){
         $user = $this->entityManager->getRepository(Users::class)->findOneBy(['id' => $userId]);
+        $checkNameGroup = $this->entityManager->getRepository(Subscribers::class)->findOneBy(['nameGroup' => $nameGroup]);
+
+        if($checkNameGroup){
+            throw new \InvalidArgumentException('Имя группы занято');
+        }
 
         if(!$user){
-            return false;
+            throw new \InvalidArgumentException('Пользовател не существуеть');
         }
 
         $createGroup = new Subscribers();

@@ -23,7 +23,7 @@ abstract class GroupTable
     #[ORM\Column(name: 'id_group', type: 'integer')]
     private ?int $id_group = null;
 
-    #[ORM\Column(name: 'groupName', type: 'string', length: 255, unique: true)]
+    #[ORM\Column(name: 'groupName', type: 'string', length: 255)]
     #[Assert\NotBlank(message: "Имя группы не должно быть пустым")]
     #[Assert\Length(min: 2, max: 50, minMessage: "Имя группы должно содержать минимум {{ limit }} символа", maxMessage: "Имя группы не должно превышать {{ limit }} символов")]
     private ?string $nameGroup = null;

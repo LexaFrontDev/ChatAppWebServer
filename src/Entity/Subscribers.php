@@ -17,7 +17,7 @@ class Subscribers extends GroupTable
     #[ORM\Column(name: 'id_users', type: 'integer')]
     private ?int $id_users = null;
 
-    #[ORM\Column(name: 'name_users', type: 'string', length: 255, unique: true)]
+    #[ORM\Column(name: 'name_users', type: 'string', length: 255, )]
     private ?string $nameUsers = null;
 
     #[ORM\Column(name: 'roles', type: "json", nullable: false)]

@@ -13,6 +13,8 @@ use App\Command\Create\CreateMessages\CreateMessagesUsersCommand;
 use App\Command\Create\CreateMessages\CreateMessagesGroupCommand;
 use App\Service\MessagesService\EncryptionService;
 use App\Service\AuthService\TokenService;
+use App\Service\UsersService\GetUserInSecurityService;
+
 
 #[AsService]
 class SendMessagesService
@@ -20,11 +22,13 @@ class SendMessagesService
     private EncryptionService $encryptionService;
     private EntityManagerInterface $entityManager;
     private Security $security;
+    private $getUsersInSecurity;
     private $messagesUsersCommand;
     private $tokenService;
     private $messagesGroupCommand;
 
     public function __construct(
+        GetUserInSecurityService $getUsersInSecurity,
         EncryptionService $encryptionService,
         TokenService $tokenService,
         CreateMessagesUsersCommand $messagesUsersCommand,
@@ -32,6 +36,7 @@ class SendMessagesService
         EntityManagerInterface $entityManager,
         Security $security
     ) {
+       $this->getUsersInSecurity = $getUsersInSecurity;
         $this->messagesGroupCommand = $messagesGroupCommand;
         $this->encryptionService = $encryptionService;
         $this->tokenService = $tokenService;
@@ -42,11 +47,9 @@ class SendMessagesService
 
 
 
-
-
     public function sendMessagesUsers(int $receiverId, string $content)
     {
-        $sender = $this->getSender();
+        $sender = $this->getUsersInSecurity->getSender();
         $senderId = $sender->getId();
 
         $receiver = $this->entityManager->getRepository(Users::class)->find($receiverId);
@@ -71,7 +74,7 @@ class SendMessagesService
     }
 
     public function sendMessagesGroup(int $groupId, string $content){
-        $sender = $this->getSender();
+        $sender = $this->getUsersInSecurity->getSender();
         $senderId = $sender->getId();
 
 
@@ -102,13 +105,5 @@ class SendMessagesService
         }
     }
 
-    public function getSender(){
-        $sender = $this->security->getUser();
 
-        if (!$sender instanceof Users) {
-            throw new UnauthorizedHttpException('Bearer', 'Отправитель не авторизован');
-        }
-
-        return $sender;
-    }
 }

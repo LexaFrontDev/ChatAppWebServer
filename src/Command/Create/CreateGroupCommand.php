@@ -27,24 +27,16 @@ class CreateGroupCommand
             return false;
         }
 
-        $createGroup = new GroupTable();
+        $createGroup = new Subscribers();
         $createGroup->setNameGroup($nameGroup);
         $createGroup->setDescription($descriptionGroup);
+        $createGroup->setIdUsers($userId);
+        $createGroup->setNameUsers($user->getName());
+        $createGroup->setRoles(['ROLE_CREATOR']);
         $this->entityManager->persist($createGroup);
         $this->entityManager->flush();
+        return $user;
 
-        $IsIdGroup = $this->entityManager->getRepository(GroupTable::class)->findOneBy(['nameGroup' => $nameGroup]);
-
-        if($IsIdGroup){
-            $createCreator = new Subscribers();
-            $createCreator->setIdGroup($IsIdGroup->getIdGroup());
-            $createCreator->setIdUsers($user->getId());
-            $createCreator->setNameUsers($user->getName());
-            $createCreator->setRoles(['ROLE_CREATOR_GROUP']);
-            $this->entityManager->persist($createCreator);
-            $this->entityManager->flush();
-            return $user;
-        }
     }
 
 }

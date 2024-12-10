@@ -48,14 +48,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     private bool $is_verified = false;
 
 
-    #[ORM\OneToMany(mappedBy: "sender", targetEntity: Messages::class)]
-    private Collection $sentMessages;
-
-    #[ORM\OneToMany(mappedBy: "receiver", targetEntity: Messages::class)]
-    private Collection $receivedMessages;
-
-
-
 
     public function getId(): ?int
     {
@@ -127,21 +119,8 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
 
-    public function __construct()
-    {
-        $this->sentMessages = new ArrayCollection();
-        $this->receivedMessages = new ArrayCollection();
-    }
 
-    public function getSentMessages(): Collection
-    {
-        return $this->sentMessages;
-    }
 
-    public function getReceivedMessages(): Collection
-    {
-        return $this->receivedMessages;
-    }
 
 
 }

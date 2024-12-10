@@ -5,7 +5,7 @@
 
 namespace App\Entity;
 
-use App\Repository\MessageRepository;
+
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -18,12 +18,13 @@ class Messages
     #[ORM\Column(name: "id_message", type: Types::INTEGER)]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Users::class, inversedBy: "sentMessages", fetch: "EAGER")]
-    #[ORM\JoinColumn(name: "sender_id", referencedColumnName: "id", nullable: false)]
+    #[ORM\GeneratedValue(strategy: "SEQUENCE")]
+    #[ORM\Column(name: "sender_id", type: Types::INTEGER)]
     private ?Users $sender = null;
 
-    #[ORM\ManyToOne(targetEntity: Users::class, inversedBy: "receivedMessages", fetch: "EAGER")]
-    #[ORM\JoinColumn(name: "receiver_id", referencedColumnName: "id", nullable: false)]
+
+    #[ORM\GeneratedValue(strategy: "SEQUENCE")]
+    #[ORM\Column(name: "receiver_id", type: Types::INTEGER)]
     private ?Users $receiver = null;
 
     #[ORM\Column(name: "content", type: Types::TEXT)]
